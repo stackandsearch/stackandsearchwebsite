@@ -1,0 +1,39 @@
+{
+  "name": "stackandsearch",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run build && npm run typecheck",
+    "test:smoke": "node scripts/run-smoke.mjs",
+    "verify": "npm run check && npm run test:smoke",
+    "test:e2e": "LEAD_DELIVERY=log playwright test",
+    "test:e2e:report": "playwright show-report",
+    "verify:all": "npm run verify && npm run test:e2e",
+    "test:responsive": "LEAD_DELIVERY=log playwright test tests/e2e/responsive.spec.ts --project=desktop-chromium",
+    "test:ui": "LEAD_DELIVERY=log playwright test tests/e2e/responsive.spec.ts tests/e2e/lead.spec.ts tests/e2e/pages.spec.ts --project=desktop-chromium",
+    "inventory": "node scripts/page-inventory.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.4",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "20.19.43",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.4",
+    "sass": "1.107.1",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

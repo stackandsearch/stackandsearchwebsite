@@ -1,0 +1,149 @@
+@use "../../../styles/mixins" as *;
+
+.section {
+  padding-block: var(--space-section);
+  border-top: 1px solid var(--color-border);
+}
+
+.header {
+  max-width: 46rem;
+  margin-bottom: var(--space-2xl);
+
+  h2 {
+    margin-bottom: var(--space-s);
+  }
+
+  p {
+    color: var(--color-text-muted);
+    font-size: var(--step-lead);
+    line-height: 1.55;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-m);
+
+  @include up(lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.item {
+  display: grid;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  padding: var(--space-l);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+}
+
+// Gradient border: the surface fills the padding box, the gradient shows
+// through the transparent border.
+.featured {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    var(--gradient-brand) border-box;
+  box-shadow: var(--shadow-2), var(--glow-accent);
+}
+
+.name {
+  font-size: var(--step-h2);
+}
+
+.bestFor {
+  color: var(--color-text-muted);
+}
+
+.price {
+  display: grid;
+  gap: 0.125rem;
+  padding-block: var(--space-s);
+  border-block: 1px solid var(--color-border);
+
+  strong {
+    font-family: var(--font-family-display);
+    font-size: var(--step-h3);
+    font-weight: 600;
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--step-small);
+  }
+}
+
+.includes {
+  display: grid;
+  gap: var(--space-2xs);
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    font-size: var(--step-small);
+    font-weight: 500;
+  }
+}
+
+.includeIcon {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.15em;
+  color: var(--color-accent-ink);
+}
+
+.cta {
+  margin-top: auto;
+  padding-top: var(--space-s);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  margin-top: var(--space-l);
+  color: var(--color-text-muted);
+}
+
+.more {
+  font-weight: 600;
+}
+
+// --- Part 6: the cards swing up from a 3D tilt ---------------------------------
+.grid {
+  @include scroll-driven {
+    animation: cards-flip linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+}
+
+@keyframes cards-flip {
+  from {
+    opacity: 0.25;
+    transform: perspective(1600px) rotateX(26deg) scale(0.94);
+  }
+}
+
+// Part 11: two columns on tablets, three on desktop.
+.grid {
+  @include up(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up(lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

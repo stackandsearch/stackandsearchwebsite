@@ -1,0 +1,14 @@
+// Build-time design tokens. Emits no CSS, so CSS Modules can @use it freely.
+// Runtime tokens (colour, space, type, motion) are CSS custom properties in _themes.scss.
+
+$breakpoints: (
+  sm: 480px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px,
+  xxl: 1536px,
+);
+
+// Fluid sizes scale between these viewport widths.
+$viewport-min: 360px;
+$viewport-max: 1440px;

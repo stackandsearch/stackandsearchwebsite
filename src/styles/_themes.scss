@@ -1,0 +1,172 @@
+// Colour system derived from the Stack & Search logo:
+// indigo #3B3FE8 (tile), mint #2BE3A8 (dot), navy #10143A (wordmark text).
+// Indigo carries primary actions in both themes (white text, 6.9:1). Mint
+// carries links, icons and highlights on dark surfaces; indigo does in light.
+// Text colours meet WCAG AA on their backgrounds (calculated; re-verify).
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "functions" as fn;
+
+$brand: (
+  dark: (
+    canvas: #070a1f, surface: #0f1430, raised: #161c40, sunken: #0a0d26,
+    text: #f5f7ff, muted: #a6acd0, border: rgb(255 255 255 / 0.08), border-strong: #6870a0,
+    accent: #3b3fe8, accent-ink: #2be3a8, on-accent: #ffffff,
+    secondary: #8b8eff, highlight: #2be3a8, highlight-ink: #2be3a8, brand-ink: #8b8eff, scheme: dark,
+  ),
+  light: (
+    canvas: #f6f7ff, surface: #ffffff, raised: #ffffff, sunken: #eceefd,
+    text: #10143a, muted: #4d5379, border: rgb(16 20 58 / 0.1), border-strong: #7f84a8,
+    accent: #3b3fe8, accent-ink: #3b3fe8, on-accent: #ffffff,
+    secondary: #4a32d4, highlight: #2be3a8, highlight-ink: #0a7d5c, brand-ink: #3b3fe8, scheme: light,
+  ),
+  stage: (bg: #070a1f, accent: #2be3a8, secondary: #5b5fff, mid: #3f8fe0, secondary-light: #b3b5ff),
+  gradient: (#3b3fe8, #3f8fe0, #2be3a8),
+);
+
+@function rgb-channels($c) {
+  @return math.round(color.channel($c, "red", $space: rgb))
+    math.round(color.channel($c, "green", $space: rgb))
+    math.round(color.channel($c, "blue", $space: rgb));
+}
+
+@mixin theme-tokens($t) {
+  --color-canvas: #{map.get($t, canvas)};
+  --color-surface: #{map.get($t, surface)};
+  --color-surface-raised: #{map.get($t, raised)};
+  --color-surface-sunken: #{map.get($t, sunken)};
+  --color-text: #{map.get($t, text)};
+  --color-text-muted: #{map.get($t, muted)};
+  --color-border: #{map.get($t, border)};
+  --color-border-strong: #{map.get($t, border-strong)};
+  --color-accent: #{map.get($t, accent)};
+  --color-accent-ink: #{map.get($t, accent-ink)};
+  --color-on-accent: #{map.get($t, on-accent)};
+  --color-secondary: #{map.get($t, secondary)};
+  --color-highlight: #{map.get($t, highlight)};
+  --color-highlight-ink: #{map.get($t, highlight-ink)};
+  --color-brand-ink: #{map.get($t, brand-ink)};
+  --color-focus: #{map.get($t, accent-ink)};
+  --color-header: rgb(#{rgb-channels(map.get($t, canvas))} / 0.9);
+  --canvas-rgb: #{rgb-channels(map.get($t, canvas))};
+  --accent-rgb: #{rgb-channels(map.get($t, accent))};
+  --accent-ink-rgb: #{rgb-channels(map.get($t, accent-ink))};
+  --secondary-rgb: #{rgb-channels(map.get($t, secondary))};
+  --highlight-ink-rgb: #{rgb-channels(map.get($t, highlight-ink))};
+
+  color-scheme: #{map.get($t, scheme)};
+}
+
+// The laptop screen and light effects use dark-stage colours in both themes.
+@mixin stage-tokens($p) {
+  $s: map.get($p, stage);
+  $g: map.get($p, gradient);
+  --color-stage: #{map.get($s, bg)};
+  --stage-bg: #{map.get($s, bg)};
+  --stage-accent: #{map.get($s, accent)};
+  --stage-secondary: #{map.get($s, secondary)};
+  --stage-mid: #{map.get($s, mid)};
+  --stage-secondary-light: #{map.get($s, secondary-light)};
+  --stage-accent-rgb: #{rgb-channels(map.get($s, accent))};
+  --stage-secondary-rgb: #{rgb-channels(map.get($s, secondary))};
+  --gradient-brand: linear-gradient(115deg, #{list.nth($g, 1)} 0%, #{list.nth($g, 2)} 50%, #{list.nth($g, 3)} 100%);
+  --gradient-beam: linear-gradient(90deg, transparent 0%, #{list.nth($g, 1)} 30%, #{list.nth($g, 3)} 70%, transparent 100%);
+}
+
+@mixin dark-shadows {
+  --shadow-1: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-2: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 12px 32px -12px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(var(--accent-rgb) / 0.12);
+  --shadow-3: 0 24px 64px -16px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+@mixin light-shadows {
+  --shadow-1: 0 1px 2px rgb(16 20 58 / 0.06), 0 1px 1px rgb(16 20 58 / 0.04);
+  --shadow-2: 0 2px 4px rgb(16 20 58 / 0.05), 0 12px 32px -12px rgb(16 20 58 / 0.18);
+  --shadow-3: 0 24px 64px -16px rgb(16 20 58 / 0.28), 0 0 0 1px rgb(16 20 58 / 0.06);
+}
+
+:root {
+  // Type families (next/font provides --font-display, --font-text, --font-logo)
+  --font-family-display: var(--font-display), "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-family-text: var(--font-text), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-family-logo: var(--font-logo), "Plus Jakarta Sans", Arial, sans-serif;
+  --font-family-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  // Fluid type scale (360px -> 1440px viewport)
+  --step-display: #{fn.fluid(44px, 92px)};
+  --step-h1: #{fn.fluid(36px, 64px)};
+  --step-h2: #{fn.fluid(28px, 44px)};
+  --step-h3: #{fn.fluid(21px, 28px)};
+  --step-lead: #{fn.fluid(18px, 21px)};
+  --step-body: #{fn.fluid(16px, 17px)};
+  --step-small: #{fn.fluid(14px, 15px)};
+  --step-label: #{fn.fluid(13px, 14px)};
+
+  // Space (4px base)
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --space-4xl: 8rem;
+  --space-5xl: 10rem;
+  --space-section: #{fn.fluid(64px, 160px)};
+  --page-margin: #{fn.fluid(20px, 64px)};
+  --gutter: #{fn.fluid(16px, 32px)};
+  --content-max: 80rem;
+  --wide-max: 90rem;
+  --measure: 68ch;
+  --header-h: 4.5rem;
+
+  // Shape: radius grows with hierarchy
+  --radius-xs: 6px;
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 28px;
+  --radius-full: 999px;
+
+  // Motion
+  --dur-instant: 120ms;
+  --dur-quick: 200ms;
+  --dur-base: 320ms;
+  --dur-reveal: 700ms;
+  --dur-hero: 1200ms;
+  --dur-ambient: 9s;
+  --stagger: 70ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: linear(0, 0.25 8%, 0.6 18%, 0.9 30%, 1.04 42%, 1.06 50%, 1.02 66%, 1);
+
+  // Layers
+  --z-header: 50;
+  --z-overlay: 100;
+
+  @include theme-tokens(map.get($brand, dark));
+  @include stage-tokens($brand);
+  @include dark-shadows;
+}
+
+:root[data-theme="light"] {
+  @include theme-tokens(map.get($brand, light));
+  @include light-shadows;
+}
+
+// No JavaScript (no data-theme): follow the operating system.
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    @include theme-tokens(map.get($brand, light));
+    @include light-shadows;
+  }
+}
+
+// Always-dark surfaces (the footer) in both themes. Effects: _effects.scss.
+.surface-dark {
+  @include theme-tokens(map.get($brand, dark));
+  @include dark-shadows;
+}

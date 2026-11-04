@@ -1,0 +1,9 @@
+// Global stylesheet entry, imported once by the root layout.
+// Component styles live next to their components as *.module.scss.
+@use "../styles/themes";
+@use "../styles/effects";
+@use "../styles/reset";
+@use "../styles/base";
+@use "../styles/typography";
+@use "../styles/motion";
+@use "../styles/scroll";

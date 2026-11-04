@@ -1,0 +1,98 @@
+@use "../../styles/mixins" as *;
+
+.marquee {
+  position: relative;
+  overflow: clip;
+  padding-block: var(--space-xl);
+  border-block: 1px solid var(--color-border);
+  background: var(--glow-page);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  view-timeline-name: --marquee;
+}
+
+.row {
+  display: flex;
+
+  & + & {
+    margin-top: var(--space-s);
+  }
+}
+
+.track {
+  display: flex;
+  flex: none;
+  gap: var(--space-l);
+  white-space: nowrap;
+}
+
+// Static offset where scroll timelines aren't supported.
+.row[data-direction="right"] .track {
+  transform: translateX(-25%);
+}
+
+.row[data-direction="left"] .track {
+  @include scroll-driven {
+    animation: marquee-left linear both;
+    animation-timeline: --marquee;
+    animation-range: cover 0% cover 100%;
+  }
+}
+
+.row[data-direction="right"] .track {
+  @include scroll-driven {
+    animation: marquee-right linear both;
+    animation-timeline: --marquee;
+    animation-range: cover 0% cover 100%;
+  }
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-45%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-45%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-l);
+  font-family: var(--font-family-display);
+  font-size: clamp(1.75rem, 4.2vw, 3.75rem);
+  font-weight: 650;
+  font-stretch: 85%;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.filled {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-border-strong);
+}
+
+.star {
+  flex: none;
+  width: 0.45em;
+  height: 0.45em;
+  fill: var(--color-accent);
+}

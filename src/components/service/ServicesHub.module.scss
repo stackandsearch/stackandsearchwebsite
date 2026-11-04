@@ -1,0 +1,348 @@
+@use "../../styles/mixins" as *;
+@use "../../styles/fx" as fx;
+
+@include fx.base;
+
+@keyframes ghost-drift {
+  from {
+    transform: translateX(10%);
+  }
+
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+.section {
+  position: relative;
+  padding-block: clamp(4rem, 9vw, 7rem);
+  border-top: 1px solid var(--color-border);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: var(--space-s);
+  color: var(--color-accent-ink);
+  font-size: var(--step-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  &::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+  }
+}
+
+.head {
+  max-width: 48rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+
+  h2 {
+    margin: 0;
+  }
+
+  @include fx.reveal;
+}
+
+.intro {
+  margin-top: var(--space-s);
+  color: var(--color-text-muted);
+  font-size: var(--step-lead);
+}
+
+.flow {
+  display: grid;
+  gap: var(--space-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up(md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-m);
+  }
+}
+
+.flowStep {
+  position: relative;
+  padding: var(--space-l) var(--space-m);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+
+  @include fx.spotlight;
+  @include fx.reveal;
+
+  strong {
+    display: block;
+    margin-bottom: var(--space-2xs);
+    font-family: var(--font-family-display);
+    font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.25rem);
+  }
+
+  p {
+    color: var(--color-text-muted);
+  }
+}
+
+.flowNumber {
+  display: inline-block;
+  margin-bottom: var(--space-s);
+  color: var(--color-accent-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 700;
+}
+
+.group {
+  isolation: isolate;
+  overflow: clip;
+  scroll-margin-top: var(--header-h);
+}
+
+.ghost {
+  position: absolute;
+  top: 2rem;
+  right: 0;
+  z-index: -1;
+  color: transparent;
+  font-family: var(--font-family-display);
+  font-size: clamp(6rem, 18vw, 16rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  -webkit-text-stroke: 1px var(--color-border-strong);
+
+  @supports (animation-timeline: view()) {
+    @include motion-ok {
+      animation: ghost-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
+.groupHead {
+  display: grid;
+  gap: var(--space-s);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+
+  @include up(lg) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+    gap: var(--space-2xl);
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  @include fx.reveal;
+}
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.serviceCard {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  height: 100%;
+  min-height: 15rem;
+  padding: var(--space-l) var(--space-m);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--color-surface) 90%, var(--color-accent)), var(--color-surface) 60%);
+  color: var(--color-text);
+  text-decoration: none;
+  transform: perspective(60rem) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+
+  @include fx.spotlight;
+  @include fx.border-light;
+  @include fx.reveal;
+
+  @include motion-ok {
+    transition:
+      transform 500ms var(--ease-out),
+      box-shadow 500ms var(--ease-out);
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 3px;
+  }
+}
+
+.dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(circle, rgb(var(--accent-ink-rgb) / 0.6) 1px, transparent 1.6px);
+  background-size: 16px 16px;
+  opacity: 0;
+  mask-image: radial-gradient(10rem circle at var(--mx, 50%) var(--my, 50%), #000, transparent 75%);
+
+  @include motion-ok {
+    transition: opacity 400ms var(--ease-out);
+  }
+}
+
+.serviceIcon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-bottom: var(--space-2xs);
+  border-radius: var(--radius-m);
+  background: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 55%, var(--color-accent-ink)));
+  box-shadow: 0 0.75rem 1.5rem -0.75rem rgb(var(--accent-rgb) / 0.9);
+  color: #fff;
+
+  svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  @include motion-ok {
+    transition: transform 500ms var(--ease-spring);
+  }
+}
+
+.serviceTitle {
+  font-family: var(--font-family-display);
+  font-size: clamp(1.25rem, 1rem + 0.7vw, 1.5rem);
+  font-weight: 600;
+}
+
+.serviceText {
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: var(--space-s);
+  color: var(--color-accent-ink);
+  font-size: var(--step-small);
+  font-weight: 600;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+
+    @include motion-ok {
+      transition: transform 400ms var(--ease-spring);
+    }
+  }
+}
+
+@media (hover: hover) {
+  .serviceCard:hover {
+    box-shadow: 0 2rem 4rem -2.5rem rgb(var(--accent-rgb) / 0.85);
+  }
+
+  .serviceCard:hover .dots {
+    opacity: 1;
+  }
+
+  .serviceCard:hover .serviceIcon {
+    transform: rotate(-8deg) scale(1.08);
+  }
+
+  .serviceCard:hover .explore svg {
+    transform: translateX(5px);
+  }
+}
+
+.more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-m);
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @include fx.reveal;
+}
+
+.moreLabel {
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.moreLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  color: var(--color-text);
+  font-size: var(--step-small);
+  text-decoration: none;
+  isolation: isolate;
+
+  // Fills from the left on hover.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+
+    @include motion-ok {
+      transition: transform 450ms var(--ease-out);
+    }
+  }
+
+  @include motion-ok {
+    transition:
+      color 300ms var(--ease-out),
+      border-color 300ms var(--ease-out);
+  }
+
+  &:hover {
+    border-color: transparent;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  &:hover::before {
+    transform: scaleX(1);
+  }
+}

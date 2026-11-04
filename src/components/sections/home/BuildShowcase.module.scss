@@ -1,0 +1,503 @@
+@use "../../../styles/mixins" as *;
+
+// Scroll storyboard. StoryScroll writes --p (0-1). Phases derived here:
+//   --open  0.06 -> 0.34  the lid opens, the screen powers on
+//   --cards 0.36 -> 0.56  six empty cards fly out from behind the laptop
+//   per-card --f          services fill into the cards (from ~0.6)
+// Without JavaScript or with reduced motion, --p stays 1: finished state.
+
+.section {
+  position: relative;
+  border-top: 1px solid var(--color-border);
+}
+
+.track {
+  --p: 1;
+  --open: clamp(0, (var(--p) - 0.06) / 0.28, 1);
+  --cards: clamp(0, (var(--p) - 0.36) / 0.2, 1);
+
+  position: relative;
+}
+
+.track[data-scrolly] {
+  height: 340vh;
+}
+
+.sticky {
+  padding-block: var(--space-section);
+
+  .track[data-scrolly] & {
+    position: sticky;
+    top: var(--header-h);
+    display: flex;
+    align-items: center;
+    height: calc(100svh - var(--header-h));
+    padding-block: var(--space-m);
+    overflow: clip;
+  }
+}
+
+.frame {
+  display: grid;
+  gap: var(--space-m);
+}
+
+// --- Heading, captions, layer chips ------------------------------------------
+.header {
+  max-width: 52rem;
+  margin-inline: auto;
+  text-align: center;
+
+  h2 {
+    margin-bottom: var(--space-2xs);
+  }
+}
+
+.captions {
+  display: grid;
+  color: var(--color-text-muted);
+  font-size: var(--step-lead);
+}
+
+.captionA,
+.captionB {
+  grid-area: 1 / 1;
+}
+
+.captionA {
+  opacity: calc(1 - var(--cards));
+}
+
+.captionB {
+  color: var(--color-text);
+  opacity: var(--cards);
+}
+
+.layers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2xs);
+  margin-top: var(--space-s);
+}
+
+.layerChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  color: var(--color-text);
+  font-size: var(--step-label);
+  font-weight: 500;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-accent-ink);
+  }
+
+  // Each chip lights up as its layer appears on the screen.
+  &:nth-child(1) {
+    opacity: calc(0.35 + 0.65 * clamp(0, var(--open) * 4 - 0.4, 1));
+  }
+
+  &:nth-child(2) {
+    opacity: calc(0.35 + 0.65 * clamp(0, var(--open) * 4 - 1.4, 1));
+  }
+
+  &:nth-child(3) {
+    opacity: calc(0.35 + 0.65 * clamp(0, var(--open) * 4 - 2.4, 1));
+  }
+
+  &:nth-child(4) {
+    opacity: calc(0.35 + 0.65 * clamp(0, var(--open) * 4 - 3.2, 1));
+  }
+}
+
+// --- Scene: cards around the laptop --------------------------------------------
+.scene {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) minmax(0, 1fr);
+    grid-template-rows: repeat(3, auto);
+    align-items: center;
+    gap: var(--space-s) var(--space-l);
+  }
+}
+
+.deviceWrap {
+  // Camera starts high (looking at the closed lid) and lowers as it opens.
+  --device-rx: calc(-30deg + var(--open) * 16deg);
+  --device-ry: calc(-4deg - var(--open) * 16deg);
+
+  position: relative;
+  z-index: 1;
+  order: -1;
+  grid-column: 1 / -1;
+  width: min(100%, 26rem);
+  margin-inline: auto;
+  padding: 2% 6% 22%;
+  container-type: inline-size;
+  transform: scale(calc(1.08 - 0.1 * var(--cards)));
+
+  @include up(lg) {
+    order: 0;
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    width: 100%;
+  }
+}
+
+.perspective {
+  perspective: 2400px;
+}
+
+.shadow {
+  position: absolute;
+  inset: auto 14% 4%;
+  z-index: -1;
+  height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.5), transparent);
+  filter: blur(10px);
+
+  :root[data-theme="light"] & {
+    background: radial-gradient(closest-side, rgb(16 20 58 / 0.25), transparent);
+  }
+}
+
+// --- Cards: fly out (--c), then fill in (--f) -----------------------------------
+.card {
+  --c: clamp(0, (var(--p) - 0.36 - var(--i) * 0.03) / 0.14, 1);
+  --f: clamp(0, (var(--p) - 0.6 - var(--i) * 0.025) / 0.12, 1);
+
+  position: relative;
+  display: grid;
+  min-height: 5.5rem;
+  padding: var(--space-s);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-m);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  box-shadow:
+    var(--shadow-2),
+    0 0 0 1px rgb(var(--accent-ink-rgb) / calc(0.45 * var(--f))),
+    0 0 32px rgb(var(--accent-rgb) / calc(0.35 * var(--f)));
+  opacity: var(--c);
+  transform:
+    translate3d(
+      calc((1 - var(--c)) * var(--from-x, 0%)),
+      calc((1 - var(--c)) * var(--from-y, -40%)),
+      0
+    )
+    scale(calc(0.7 + 0.3 * var(--c)));
+
+  @include up(lg) {
+    min-height: 8.5rem;
+    padding: var(--space-m);
+  }
+
+  &:has(.cardLink:focus-visible) {
+    @include focus-ring;
+  }
+}
+
+@include up(lg) {
+  .card:nth-child(1) {
+    --from-x: 75%;
+    --from-y: 45%;
+
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .card:nth-child(2) {
+    --from-x: 85%;
+    --from-y: 0%;
+
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .card:nth-child(3) {
+    --from-x: 75%;
+    --from-y: -45%;
+
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .card:nth-child(4) {
+    --from-x: -75%;
+    --from-y: 45%;
+
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .card:nth-child(5) {
+    --from-x: -85%;
+    --from-y: 0%;
+
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .card:nth-child(6) {
+    --from-x: -75%;
+    --from-y: -45%;
+
+    grid-column: 3;
+    grid-row: 3;
+  }
+}
+
+.skeleton,
+.content {
+  grid-area: 1 / 1;
+}
+
+.skeleton {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  opacity: calc(1 - var(--f));
+}
+
+.skeletonIcon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-s);
+  background: var(--color-accent-soft);
+}
+
+.skeletonLine {
+  height: 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--color-border-strong);
+  opacity: 0.4;
+}
+
+.skeletonShort {
+  width: 60%;
+}
+
+.content {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  opacity: var(--f);
+  transform: translateY(calc((1 - var(--f)) * 0.75rem));
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-ink);
+
+  svg {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+}
+
+.cardTitle {
+  font-size: var(--step-body);
+  line-height: 1.25;
+
+  @include up(lg) {
+    font-size: var(--step-h3);
+  }
+}
+
+.cardLink {
+  color: var(--color-text);
+  text-decoration: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.cardText {
+  display: none;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+  line-height: 1.45;
+
+  @include up(md) {
+    display: block;
+  }
+}
+
+// =============================================================================
+// Part 11: pinned mode must fit the visible area on every device. The pinned
+// box is a size container, so sizes scale with its height (cqh units); short
+// screens drop the layer chips, then the card descriptions.
+// =============================================================================
+.track[data-scrolly] .sticky {
+  top: var(--header-offset, var(--header-h));
+  height: calc(100svh - var(--header-offset, var(--header-h)));
+  padding-block: clamp(0.75rem, 3svh, 2rem);
+  container-type: size;
+
+  @include motion-ok {
+    transition:
+      top 380ms var(--ease-out),
+      height 380ms var(--ease-out);
+  }
+}
+
+.track[data-scrolly] .frame {
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(0.5rem, 2.5cqh, 1.5rem);
+  height: 100%;
+}
+
+.track[data-scrolly] .header h2 {
+  font-size: clamp(1.35rem, 5.2cqh, var(--step-h2));
+}
+
+.track[data-scrolly] .captions {
+  font-size: clamp(0.875rem, 2.6cqh, var(--step-lead));
+}
+
+.track[data-scrolly] .layers {
+  margin-top: clamp(0.4rem, 1.6cqh, 1rem);
+}
+
+@container (max-height: 640px) {
+  .layers {
+    display: none;
+  }
+}
+
+@container (max-height: 470px) {
+  .captions {
+    display: none;
+  }
+}
+
+.track[data-scrolly] .scene {
+  min-height: 0;
+  grid-template-rows: auto repeat(3, minmax(0, 1fr));
+  gap: clamp(0.4rem, 1.6cqh, 1rem);
+
+  @include up(lg) {
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.5rem, 2cqh, 1.25rem) var(--space-l);
+  }
+}
+
+.track[data-scrolly] .deviceWrap {
+  width: min(100%, 36cqh);
+
+  @include up(md) {
+    width: min(100%, 42cqh);
+  }
+
+  @include up(lg) {
+    align-self: center;
+    width: min(100%, 74cqh);
+  }
+}
+
+.track[data-scrolly] .card {
+  min-height: 0;
+  padding: clamp(0.55rem, 2cqh, 1.4rem);
+  overflow: hidden;
+}
+
+.track[data-scrolly] .content,
+.track[data-scrolly] .skeleton {
+  @include down(lg) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.6rem;
+  }
+}
+
+.track[data-scrolly] .skeletonShort {
+  @include down(lg) {
+    display: none;
+  }
+}
+
+.track[data-scrolly] .icon,
+.track[data-scrolly] .skeletonIcon {
+  width: clamp(1.75rem, 5cqh, 2.25rem);
+  height: clamp(1.75rem, 5cqh, 2.25rem);
+  margin-bottom: 0;
+}
+
+.track[data-scrolly] .cardTitle {
+  font-size: clamp(0.875rem, 2.8cqh, var(--step-h3));
+}
+
+.track[data-scrolly] .cardText {
+  display: none;
+
+  @include up(lg) {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: clamp(0.8rem, 2cqh, var(--step-small));
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+@container (max-height: 560px) {
+  .cardText {
+    display: none !important;
+  }
+}
+
+// Landscape phones: too short to pin anything, so show the finished layout.
+@media (max-height: 500px) {
+  .track[data-scrolly] {
+    --p: 1 !important;
+
+    height: auto;
+  }
+
+  .track[data-scrolly] .sticky {
+    position: relative;
+    top: auto;
+    height: auto;
+    padding-block: var(--space-section);
+    container-type: normal;
+  }
+
+  .track[data-scrolly] .frame,
+  .track[data-scrolly] .scene {
+    height: auto;
+    grid-template-rows: none;
+  }
+}
+
+// Part 11b: compact titles in the two-column phone/tablet grid so names
+// like "Website development" fit next to the icon.
+.track[data-scrolly] .cardTitle {
+  @include down(lg) {
+    font-size: clamp(0.8125rem, 2.3cqh, 1.05rem);
+    line-height: 1.2;
+  }
+}

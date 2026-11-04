@@ -1,0 +1,19 @@
+// Helper functions. Emits no CSS.
+@use "sass:math";
+@use "tokens";
+
+@function round-to($number, $places: 4) {
+  $factor: math.pow(10, $places);
+  @return math.div(math.round($number * $factor), $factor);
+}
+
+@function rem($px) {
+  @return round-to(math.div($px, 16px)) * 1rem;
+}
+
+// fluid(44px, 92px) grows linearly from 44px at 360px wide to 92px at 1440px wide.
+@function fluid($min, $max, $from: tokens.$viewport-min, $to: tokens.$viewport-max) {
+  $slope: math.div($max - $min, $to - $from);
+  $intercept: $min - $slope * $from;
+  @return clamp(rem($min), rem($intercept) + round-to($slope * 100) * 1vw, rem($max));
+}

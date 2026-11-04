@@ -1,0 +1,889 @@
+@use "../../../styles/mixins" as *;
+
+// Hero: "the search horizon".
+// Timing rule: every timed animation here finishes within ~5 seconds. After
+// that, the scene moves only with the pointer (--px/--py/--mx/--my from
+// HeroScene) and with scrolling, so no pause control is needed (WCAG 2.2.2).
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  overflow: clip;
+  min-height: min(58rem, calc(100svh - var(--header-h)));
+  padding-block: var(--space-2xl) var(--space-3xl);
+}
+
+// =============================================================================
+// Background layers (back to front)
+// =============================================================================
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+// Aurora: soft colour fields that bloom on load and drift with the pointer.
+.blob {
+  position: absolute;
+  width: 46vmax;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: calc(var(--px, 0) * var(--depth, 20px)) calc(var(--py, 0) * var(--depth, 20px));
+
+  @include motion-ok {
+    animation: blob-bloom 2.6s var(--ease-out) var(--delay, 0s) both;
+  }
+}
+
+.blobA {
+  --depth: -34px;
+
+  top: -20vmax;
+  right: -12vmax;
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.34), transparent 72%);
+}
+
+.blobB {
+  --depth: 26px;
+  --delay: 0.2s;
+
+  bottom: -24vmax;
+  left: -16vmax;
+  background: radial-gradient(closest-side, rgb(var(--secondary-rgb) / 0.28), transparent 72%);
+}
+
+.blobC {
+  --depth: -18px;
+  --delay: 0.4s;
+
+  top: 34%;
+  left: 38%;
+  width: 30vmax;
+  background: radial-gradient(closest-side, rgb(var(--highlight-ink-rgb) / 0.12), transparent 72%);
+}
+
+@keyframes blob-bloom {
+  from {
+    opacity: 0;
+    scale: 0.55;
+  }
+}
+
+// Starfield: twinkles twice, then rests.
+.stars {
+  position: absolute;
+  inset: 0;
+  translate: calc(var(--px, 0) * -12px) calc(var(--py, 0) * -12px);
+
+  :root[data-theme="light"] & {
+    opacity: 0.45;
+  }
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--color-text);
+  opacity: 0.55;
+
+  &[data-size="2"] {
+    width: 3px;
+    height: 3px;
+  }
+
+  &[data-size="3"] {
+    width: 4px;
+    height: 4px;
+    background: var(--color-accent);
+    box-shadow: 0 0 10px rgb(var(--accent-rgb) / 0.85);
+  }
+
+  @include motion-ok {
+    animation: twinkle 1.4s ease-in-out var(--d, 0s) 2 both;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.55;
+    scale: 1;
+  }
+
+  50% {
+    opacity: 1;
+    scale: 1.9;
+  }
+}
+
+// 3D grid floor receding to the horizon; rushes toward you once on load.
+.floor {
+  position: absolute;
+  inset: 30% -25% 0;
+  perspective: 32rem;
+  perspective-origin: 50% 0%;
+  mask-image: linear-gradient(to top, #000 8%, transparent 78%);
+}
+
+.floorGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(var(--accent-rgb) / 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--accent-rgb) / 0.3) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  transform: rotateX(68deg);
+  transform-origin: 50% 100%;
+
+  @include motion-ok {
+    animation: floor-run 4.6s var(--ease-out) both;
+  }
+}
+
+@keyframes floor-run {
+  from {
+    background-position: 0 -20rem;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+// Horizon glow line. Adjust --horizon if it sits too high or low.
+.horizon {
+  --horizon: 52%;
+
+  position: absolute;
+  top: var(--horizon);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-beam);
+  box-shadow: 0 0 24px 2px rgb(var(--accent-rgb) / 0.55);
+
+  @include motion-ok {
+    animation: horizon-in 1.6s var(--ease-out) 0.3s both;
+  }
+}
+
+@keyframes horizon-in {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+}
+
+// Cursor spotlight (rests over the laptop when the mouse is elsewhere).
+.spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    38rem circle at var(--mx, 72%) var(--my, 42%),
+    rgb(var(--accent-rgb) / 0.16),
+    transparent 62%
+  );
+}
+
+// Fine film grain for depth (static).
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+
+  :root[data-theme="light"] & {
+    opacity: 0.05;
+  }
+}
+
+// =============================================================================
+// Copy
+// =============================================================================
+.inner {
+  display: grid;
+  align-items: center;
+  gap: var(--space-2xl);
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+}
+
+.copy {
+  position: relative;
+}
+
+// Search bar: types the query once, then glows.
+.search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 100%;
+  margin-bottom: var(--space-l);
+  padding: 0.55rem 0.6rem 0.55rem 0.9rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  box-shadow: var(--shadow-2);
+  color: var(--color-text);
+  font-family: var(--font-family-mono);
+  font-size: clamp(0.75rem, 0.68rem + 0.35vw, 0.9375rem);
+
+  @include motion-ok {
+    animation:
+      search-in 700ms var(--ease-out) both,
+      search-glow 1.4s var(--ease-out) 2.5s both;
+  }
+}
+
+.searchIcon {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--color-accent-ink);
+}
+
+.query {
+  width: calc(var(--chars) * 1ch);
+  overflow: hidden;
+  white-space: nowrap;
+
+  @include motion-ok {
+    animation: type calc(var(--chars) * 55ms) steps(var(--chars), end) 600ms both;
+  }
+}
+
+.caret {
+  flex: none;
+  width: 2px;
+  height: 1.15em;
+  background: var(--color-accent);
+
+  @include motion-ok {
+    animation: caret-blink 0.8s steps(1, end) 6;
+  }
+}
+
+.enter {
+  flex: none;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-text);
+  font-size: 0.72em;
+}
+
+@keyframes search-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+  }
+}
+
+@keyframes type {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes search-glow {
+  0%,
+  100% {
+    box-shadow: var(--shadow-2);
+  }
+
+  40% {
+    box-shadow:
+      var(--shadow-2),
+      0 0 0 4px rgb(var(--accent-rgb) / 0.25),
+      var(--glow-accent);
+  }
+}
+
+// Headline: movement only, never opacity, so it counts for LCP immediately.
+.title {
+  max-width: 14ch;
+  margin-bottom: var(--space-s);
+
+  @include motion-ok {
+    animation: rise 900ms var(--ease-out) both;
+  }
+}
+
+// A beam draws under the headline, then a flare travels along it.
+.titleBeam {
+  position: relative;
+  display: block;
+  width: min(22rem, 70%);
+  height: 2px;
+  margin-bottom: var(--space-l);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--gradient-brand);
+  transform-origin: 0 50%;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -4px auto -4px 0;
+    width: 30%;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.9), transparent);
+    opacity: 0;
+  }
+
+  @include motion-ok {
+    animation: beam-draw 1.1s var(--ease-out) 1.2s both;
+
+    &::after {
+      animation: beam-flare 1.4s var(--ease-in-out) 2.2s both;
+    }
+  }
+}
+
+@keyframes beam-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes beam-flare {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  20%,
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(340%);
+  }
+}
+
+.lead {
+  margin-bottom: var(--space-l);
+
+  @include motion-ok {
+    animation: fade-rise 800ms var(--ease-out) 300ms both;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin-bottom: var(--space-l);
+
+  @include motion-ok {
+    animation: fade-rise 800ms var(--ease-out) 450ms both;
+  }
+}
+
+.proof {
+  display: grid;
+  gap: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  @include motion-ok {
+    animation: fade-rise 800ms var(--ease-out) 600ms both;
+  }
+}
+
+.proofIcon {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-accent-ink);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(1rem);
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+// =============================================================================
+// Visual stage: orbit ring, laptop, glass cube, sphere, floating cards
+// =============================================================================
+.stage {
+  --device-rx: -12deg;
+  --device-ry: -14deg;
+
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 38rem);
+  margin-inline: auto;
+  padding: 7% 8% 26%;
+  container-type: inline-size;
+
+  @include up(lg) {
+    --device-ry: -22deg;
+  }
+}
+
+// Tilted orbit ring behind the laptop; a light zips around it once.
+.orbit {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  z-index: -1;
+  width: 118%;
+  aspect-ratio: 1;
+  border: 1px solid rgb(var(--accent-rgb) / 0.4);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 40px rgb(var(--accent-rgb) / 0.14),
+    0 0 60px rgb(var(--secondary-rgb) / 0.14);
+  transform: translate(-50%, -50%) perspective(60rem) rotateX(72deg);
+
+  @include motion-ok {
+    animation: orbit-in 3.4s var(--ease-out) 0.5s both;
+  }
+}
+
+.orbitDot {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 16px 4px rgb(var(--accent-rgb) / 0.75);
+}
+
+@keyframes orbit-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) perspective(60rem) rotateX(72deg) rotateZ(-450deg) scale(0.6);
+  }
+}
+
+// Laptop chain: fade (holds perspective) > entrance > float > device.
+.fade {
+  perspective: 1800px;
+
+  @include motion-ok {
+    animation: fade-in 900ms var(--ease-out) 150ms both;
+  }
+}
+
+.entrance {
+  transform-style: preserve-3d;
+
+  @include motion-ok {
+    animation: device-in var(--dur-hero) var(--ease-out) 150ms both;
+  }
+}
+
+.float {
+  transform-style: preserve-3d;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes device-in {
+  from {
+    transform: translate3d(10%, 8%, -260px) rotateX(10deg) rotateY(-16deg);
+  }
+}
+
+// Glass cube: spins in once, then follows the pointer at depth.
+.cubeWrap {
+  --size: 12cqi;
+
+  position: absolute;
+  top: -3%;
+  left: 36%;
+  width: var(--size);
+  height: var(--size);
+  perspective: 40rem;
+  translate: calc(var(--px, 0) * 30px) calc(var(--py, 0) * 22px);
+
+  @include motion-ok {
+    animation: cube-in 900ms var(--ease-out) 1.1s both;
+  }
+}
+
+.cube {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: rotateX(-24deg) rotateY(38deg);
+  transform-style: preserve-3d;
+
+  @include motion-ok {
+    animation: cube-spin 3.6s var(--ease-out) 1.1s both;
+  }
+
+  span {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgb(var(--accent-rgb) / 0.6);
+    background: linear-gradient(135deg, rgb(var(--accent-rgb) / 0.24), rgb(var(--secondary-rgb) / 0.12));
+    box-shadow: inset 0 0 20px rgb(var(--accent-rgb) / 0.22);
+  }
+
+  span:nth-child(1) {
+    transform: translateZ(calc(var(--size) / 2));
+  }
+
+  span:nth-child(2) {
+    transform: rotateY(180deg) translateZ(calc(var(--size) / 2));
+  }
+
+  span:nth-child(3) {
+    transform: rotateY(90deg) translateZ(calc(var(--size) / 2));
+  }
+
+  span:nth-child(4) {
+    transform: rotateY(-90deg) translateZ(calc(var(--size) / 2));
+  }
+
+  span:nth-child(5) {
+    transform: rotateX(90deg) translateZ(calc(var(--size) / 2));
+  }
+
+  span:nth-child(6) {
+    transform: rotateX(-90deg) translateZ(calc(var(--size) / 2));
+  }
+}
+
+@keyframes cube-in {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+@keyframes cube-spin {
+  from {
+    transform: rotateX(-24deg) rotateY(-322deg);
+  }
+}
+
+// Glowing sphere.
+.sphere {
+  position: absolute;
+  right: 6%;
+  bottom: 6%;
+  width: 7cqi;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 30%, rgb(255 255 255 / 0.85), transparent 30%),
+    radial-gradient(circle at 50% 50%, var(--color-secondary), rgb(var(--secondary-rgb) / 0.2) 70%);
+  box-shadow: 0 0 30px rgb(var(--secondary-rgb) / 0.5);
+  translate: calc(var(--px, 0) * -24px) calc(var(--py, 0) * -18px);
+
+  @include motion-ok {
+    animation: cube-in 900ms var(--ease-out) 1.5s both;
+  }
+}
+
+.shadow {
+  position: absolute;
+  inset: auto 12% 5%;
+  z-index: -1;
+  height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.5), transparent);
+  filter: blur(10px);
+
+  :root[data-theme="light"] & {
+    background: radial-gradient(closest-side, rgb(17 26 46 / 0.28), transparent);
+  }
+}
+
+// --- Floating cards -------------------------------------------------------------
+// `translate` follows the pointer; `transform` is free for the entrance.
+.chip {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background: color-mix(in srgb, var(--color-surface-raised) 92%, transparent);
+  box-shadow: var(--shadow-2);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  translate: calc(var(--px, 0) * var(--depth, 12px)) calc(var(--py, 0) * var(--depth, 12px));
+
+  @include motion-ok {
+    animation: chip-in 700ms var(--ease-out) var(--chip-delay, 1.4s) both;
+  }
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.94);
+  }
+}
+
+.chipResult {
+  --depth: 22px;
+  --chip-delay: 1.5s;
+  --chip-tilt: -8deg;
+
+  bottom: 12%;
+  left: 0;
+  width: min(15rem, 62%);
+}
+
+.chipAnswer {
+  --depth: 34px;
+  --chip-delay: 1.65s;
+  --chip-tilt: 6deg;
+
+  top: 18%;
+  left: -4%;
+  display: none;
+  max-width: 13rem;
+
+  @include up(md) {
+    display: grid;
+  }
+}
+
+.chipSchema {
+  --depth: 30px;
+  --chip-delay: 1.8s;
+  --chip-tilt: 7deg;
+
+  top: 0;
+  right: 2%;
+  display: none;
+
+  @include up(md) {
+    display: grid;
+  }
+}
+
+.chipVitals {
+  --depth: 16px;
+  --chip-delay: 1.95s;
+  --chip-tilt: -5deg;
+
+  right: 0;
+  bottom: 32%;
+  display: none;
+
+  @include up(md) {
+    display: grid;
+  }
+}
+
+.chipTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.chipIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-accent-ink);
+}
+
+.resultUrl {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.favicon {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+}
+
+.resultTitle {
+  color: var(--color-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.resultLine {
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--color-border-strong);
+  opacity: 0.45;
+}
+
+.resultLineShort {
+  width: 68%;
+}
+
+.code {
+  color: var(--color-accent-ink);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.vitalsRow {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0.4rem;
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+}
+
+// =============================================================================
+// Scroll-linked exit (Chrome, Edge, Safari 26+): the scene lifts and separates
+// =============================================================================
+.copy {
+  @include scroll-driven {
+    animation: hero-copy-exit linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+  }
+}
+
+.float {
+  @include scroll-driven {
+    animation: hero-device-exit linear both;
+    animation-timeline: view();
+    animation-range: exit -20% exit 90%;
+  }
+}
+
+.chip {
+  @include scroll-driven {
+    animation:
+      chip-in 700ms var(--ease-out) var(--chip-delay, 1.4s) both,
+      chip-scroll linear both;
+    animation-timeline: auto, view();
+    animation-range: normal, exit 0% exit 100%;
+  }
+}
+
+.cubeWrap {
+  @include scroll-driven {
+    animation:
+      cube-in 900ms var(--ease-out) 1.1s both,
+      cube-exit linear both;
+    animation-timeline: auto, view();
+    animation-range: normal, exit 0% exit 100%;
+  }
+}
+
+.orbit {
+  @include scroll-driven {
+    animation:
+      orbit-in 3.4s var(--ease-out) 0.5s both,
+      orbit-exit linear both;
+    animation-timeline: auto, view();
+    animation-range: normal, exit 0% exit 100%;
+  }
+}
+
+.blob {
+  @include scroll-driven {
+    animation:
+      blob-bloom 2.6s var(--ease-out) var(--delay, 0s) both,
+      blob-exit linear both;
+    animation-timeline: auto, view();
+    animation-range: normal, exit 0% exit 100%;
+  }
+}
+
+.floor {
+  @include scroll-driven {
+    animation: floor-exit linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+  }
+}
+
+@keyframes hero-copy-exit {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -4rem, 0);
+  }
+}
+
+@keyframes hero-device-exit {
+  to {
+    transform: translate3d(0, -10%, 0) rotateX(16deg) rotateZ(-3deg) scale(0.9);
+  }
+}
+
+@keyframes chip-scroll {
+  to {
+    rotate: var(--chip-tilt, -6deg);
+    scale: 0.86;
+  }
+}
+
+@keyframes cube-exit {
+  to {
+    rotate: 40deg;
+  }
+}
+
+@keyframes orbit-exit {
+  to {
+    scale: 1.35;
+  }
+}
+
+@keyframes blob-exit {
+  to {
+    transform: translateY(20%);
+  }
+}
+
+@keyframes floor-exit {
+  to {
+    opacity: 0.2;
+    transform: translateY(12%);
+  }
+}

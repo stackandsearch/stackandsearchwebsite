@@ -1,0 +1,40 @@
+.crumbs {
+  margin-bottom: var(--space-s);
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-muted);
+    font-size: var(--step-small);
+    list-style: none;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  li + li::before {
+    content: "/";
+    opacity: 0.5;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: underline;
+    }
+  }
+
+  [aria-current="page"] {
+    color: var(--color-text);
+  }
+}

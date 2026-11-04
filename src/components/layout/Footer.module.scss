@@ -1,0 +1,303 @@
+@use "../../styles/mixins" as *;
+
+// Always dark: the .surface-dark class supplies dark tokens in both themes.
+.footer {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-top: var(--space-section);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-canvas);
+  color: var(--color-text);
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    var(--glow-page),
+    radial-gradient(60% 45% at 50% 100%, rgb(var(--accent-rgb) / 0.3), transparent 70%);
+  pointer-events: none;
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-2xl);
+  container-type: inline-size;
+}
+
+// --- Call-to-action card ------------------------------------------------------
+.cta {
+  display: grid;
+  gap: var(--space-xl);
+  padding: var(--space-l);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background:
+    linear-gradient(140deg, rgb(var(--accent-rgb) / 0.22), rgb(var(--accent-ink-rgb) / 0.06) 55%, transparent 85%),
+    var(--color-surface);
+  box-shadow: var(--shadow-3);
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+    padding: var(--space-2xl);
+  }
+}
+
+.ctaTitle {
+  max-width: 18ch;
+  margin-bottom: var(--space-s);
+  font-size: var(--step-h2);
+}
+
+.ctaText {
+  max-width: 48ch;
+  margin-bottom: var(--space-l);
+  color: var(--color-text-muted);
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+.helpTitle {
+  margin-bottom: var(--space-s);
+  font-weight: 600;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 2.75rem;
+  padding: 0 var(--space-s) 0 var(--space-xs);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  color: var(--color-text);
+  font-size: var(--step-small);
+  font-weight: 500;
+  text-decoration: none;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-accent-ink);
+  }
+
+  &:hover {
+    border-color: var(--color-accent-ink);
+    background: var(--color-accent-soft);
+  }
+
+  @include motion-ok {
+    transition:
+      border-color var(--dur-quick) var(--ease-out),
+      background-color var(--dur-quick) var(--ease-out);
+  }
+}
+
+// --- Logo and link columns ------------------------------------------------------
+.main {
+  display: grid;
+  gap: var(--space-xl);
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3.2fr);
+  }
+}
+
+.brand {
+  display: grid;
+  align-content: start;
+  gap: var(--space-s);
+}
+
+.brandLink {
+  justify-self: start;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.tagline {
+  max-width: 30ch;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-l) var(--space-m);
+
+  @include up(md) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.colTitle {
+  margin-bottom: var(--space-xs);
+  color: var(--color-text);
+  font-family: var(--font-family-display);
+  font-weight: 600;
+}
+
+.links {
+  display: grid;
+  gap: var(--space-3xs);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+}
+
+// --- Giant logo ---------------------------------------------------------------------
+// Sized to the footer width (cqi units); fades into the footer at the bottom.
+// Adjust --giant-size if it is too wide or narrow on your screen.
+.giant {
+  --giant-size: 11cqi;
+
+  margin-block: var(--space-l) calc(var(--space-l) * -1);
+  mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
+  user-select: none;
+}
+
+.giantInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.14em;
+  padding-top: 0.2em;
+  font-family: var(--font-family-logo);
+  font-size: var(--giant-size);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+
+  @include scroll-driven {
+    animation: giant-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+@keyframes giant-rise {
+  from {
+    opacity: 0;
+    transform: translateY(45%) scaleX(1.06);
+  }
+}
+
+.giantMark {
+  flex: none;
+  width: 0.86em;
+  height: 0.86em;
+  border-radius: 0.2em;
+  box-shadow: 0 0 60px rgb(var(--accent-rgb) / 0.55);
+
+  @include motion-ok {
+    transition: transform 500ms var(--ease-spring);
+  }
+}
+
+.giantTile {
+  fill: #3b3fe8;
+}
+
+.giantS {
+  fill: none;
+  stroke: #ffffff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 8;
+}
+
+.giantDot {
+  fill: #2be3a8;
+}
+
+.giantWord {
+  display: inline-flex;
+}
+
+.letter {
+  display: inline-block;
+
+  @include motion-ok {
+    transition:
+      transform 500ms var(--ease-spring),
+      color 250ms var(--ease-out),
+      text-shadow 250ms var(--ease-out);
+  }
+}
+
+.stack {
+  color: var(--color-text);
+}
+
+.and {
+  color: #8a8fb0;
+}
+
+.search {
+  color: var(--color-brand-ink);
+}
+
+// Hover: the letter under the mouse springs up and lights mint; its
+// neighbours lift with it, so moving across the word sends a wave through it.
+@include hover-capable {
+  .letter:hover {
+    color: var(--color-accent-ink);
+    text-shadow: 0 0 48px rgb(var(--accent-ink-rgb) / 0.65);
+    transform: translateY(-18%) rotate(-5deg);
+  }
+
+  .letter:hover + .letter,
+  .letter:has(+ .letter:hover) {
+    transform: translateY(-8%);
+  }
+
+  .giantMark:hover {
+    transform: rotate(-8deg) scale(1.06);
+  }
+}
+
+// --- Bottom bar ---------------------------------------------------------------------
+.bottom {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding-block: var(--space-l);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-m);
+}

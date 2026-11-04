@@ -1,0 +1,226 @@
+@use "../../styles/mixins" as *;
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  min-height: 2.75rem;
+  padding: 0 var(--space-xs);
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover,
+  &[data-open] {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+}
+
+.chevron {
+  width: 1rem;
+  height: 1rem;
+
+  .trigger[data-open] & {
+    transform: rotate(180deg);
+  }
+
+  @include motion-ok {
+    transition: transform var(--dur-quick) var(--ease-out);
+  }
+}
+
+// Top-layer popover; the browser hides it when closed, so never set display.
+.panel {
+  position: fixed;
+  inset: calc(var(--header-h) + var(--space-2xs)) 0 auto;
+  width: min(100% - 2 * var(--page-margin), 76rem);
+  max-height: calc(100svh - var(--header-h) - var(--space-l));
+  margin: 0 auto;
+  padding: var(--space-l);
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  background-image: var(--glow-page);
+  color: var(--color-text);
+  box-shadow: var(--shadow-3);
+
+  @include motion-ok {
+    animation: panel-in var(--dur-base) var(--ease-out);
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.985);
+  }
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-l);
+
+  @include up(xl) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 0.95fr);
+  }
+}
+
+.column {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2xs);
+}
+
+.groupLabel {
+  font-family: var(--font-family-display);
+  font-size: var(--step-h3);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.intro {
+  margin-bottom: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.items {
+  display: grid;
+  gap: 2px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-xs);
+  margin-inline: calc(var(--space-xs) * -1);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-m);
+  color: var(--color-text);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--color-surface-sunken);
+  }
+}
+
+.itemIcon {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-ink);
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  @include motion-ok {
+    transition: transform var(--dur-quick) var(--ease-spring);
+  }
+}
+
+.item:hover .itemIcon {
+  transform: translateY(-2px) scale(1.06);
+}
+
+.itemLabel {
+  font-size: var(--step-small);
+  font-weight: 600;
+}
+
+.itemSummary {
+  grid-column: 2;
+  color: var(--color-text-muted);
+  font-size: var(--step-label);
+  line-height: 1.4;
+}
+
+.more {
+  display: grid;
+  gap: 2px;
+  margin-top: var(--space-2xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--color-border);
+}
+
+.moreLink {
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+  text-decoration: none;
+
+  &::before {
+    content: "";
+    flex: none;
+    width: 0.375rem;
+    height: 0.375rem;
+    margin-right: 0.6rem;
+    border-radius: 50%;
+    background: var(--color-border-strong);
+  }
+
+  &:hover {
+    color: var(--color-text);
+
+    &::before {
+      background: var(--color-accent-ink);
+    }
+  }
+}
+
+.aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  grid-column: 1 / -1;
+  padding: var(--space-m);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background:
+    linear-gradient(140deg, rgb(var(--accent-rgb) / 0.2), rgb(var(--accent-ink-rgb) / 0.06) 60%, transparent),
+    var(--color-surface-raised);
+
+  @include up(xl) {
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    grid-column: auto;
+  }
+}
+
+.asideTitle {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+}
+
+.asideText {
+  flex: 1 1 16rem;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+
+  @include up(xl) {
+    flex: none;
+  }
+}
+
+.all {
+  font-size: var(--step-small);
+  font-weight: 600;
+}

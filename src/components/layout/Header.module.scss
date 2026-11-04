@@ -1,0 +1,111 @@
+@use "../../styles/mixins" as *;
+
+// Constant height (no layout shift when its background changes later).
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  height: var(--header-h);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-header);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  height: 100%;
+
+  @include up(lg) {
+    gap: var(--space-m);
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-right: auto;
+  border-radius: var(--radius-xs);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.nav {
+  display: none;
+
+  @include up(lg) {
+    display: block;
+  }
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-s);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  @include motion-ok {
+    transition:
+      color var(--dur-quick) var(--ease-out),
+      background-color var(--dur-quick) var(--ease-out);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+// Header CTA: shown beside the mobile menu from 768px, hidden while the
+// desktop nav is tight (1024-1279px), then shown again from 1280px.
+.cta {
+  display: none;
+
+  @include up(md) {
+    display: inline-flex;
+  }
+
+  @include up(lg) {
+    @include down(xl) {
+      display: none;
+    }
+  }
+}
+
+// Part 5: frosted glass where supported, so content scrolling underneath
+// blurs instead of showing through. The solid background above is the fallback.
+@supports (backdrop-filter: blur(1px)) {
+  .header {
+    background: color-mix(in srgb, var(--color-canvas) 72%, transparent);
+    backdrop-filter: blur(16px) saturate(160%);
+  }
+}
+
+// Part 11: slides away on scroll down, back on scroll up (HeaderShell).
+.header {
+  @include motion-ok {
+    transition: transform 380ms var(--ease-out);
+  }
+}
+
+.header[data-hidden] {
+  transform: translateY(-100%);
+}

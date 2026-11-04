@@ -1,0 +1,52 @@
+@use "../styles/mixins" as *;
+
+// Wraps a section so decorative vector art can sit behind its content.
+// overflow-x: clip (not hidden) keeps the sticky laptop working.
+.scene {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.orbitShowcase {
+  top: 16%;
+  left: -16rem;
+}
+
+.orbitServices {
+  top: 2%;
+  right: -18rem;
+}
+
+.orbitPackages {
+  bottom: -8rem;
+  left: -14rem;
+}
+
+@include down(md) {
+  .orbitShowcase {
+    left: -45vw;
+  }
+
+  .orbitServices {
+    right: -50vw;
+  }
+
+  .orbitPackages {
+    left: -45vw;
+  }
+}
+
+.upcoming {
+  padding-block: var(--space-3xl);
+  border-top: 1px solid var(--color-border);
+
+  h2 {
+    margin-bottom: var(--space-2xs);
+  }
+
+  p {
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+  }
+}

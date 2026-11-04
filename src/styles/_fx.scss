@@ -1,0 +1,132 @@
+@use "mixins" as *;
+
+// Shared interaction styles for inner pages. Pair with <Interactions />,
+// which sets data-fx-shown, --mx/--my, --rx/--ry, --tx/--ty and --px/--py.
+// Include `fx.base` once at the top level of each module that uses these.
+
+@mixin base {
+  @property --fx-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+
+  @keyframes fx-rise {
+    from {
+      opacity: 0;
+      translate: 0 2rem;
+    }
+  }
+
+  @keyframes fx-spin {
+    to {
+      --fx-angle: 360deg;
+    }
+  }
+}
+
+// Fades and rises the first time it scrolls into view (data-fx-reveal).
+// Stagger with an inline --i. Only when JavaScript runs and motion is on.
+@mixin reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    :global(:root[data-js]) &:not([data-fx-shown]) {
+      opacity: 0;
+    }
+
+    :global(:root[data-js]) &[data-fx-shown] {
+      animation: fx-rise 900ms var(--ease-out) calc(var(--i, 0) * 90ms) backwards;
+    }
+  }
+}
+
+// Soft light that follows the pointer (data-fx-spot). Uses ::before and
+// lifts direct children above it.
+@mixin spotlight {
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      var(--spot-size, 24rem) circle at var(--mx, 50%) var(--my, 0%),
+      rgb(var(--accent-rgb) / var(--spot-alpha, 0.2)),
+      transparent 65%
+    );
+    opacity: 0;
+    pointer-events: none;
+
+    @include motion-ok {
+      transition: opacity 400ms var(--ease-out);
+    }
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+// A border that lights up around the pointer (data-fx-spot). Uses ::after.
+@mixin border-light {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 0%), var(--color-accent-ink), transparent 70%);
+    opacity: 0;
+    pointer-events: none;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+
+    @include motion-ok {
+      transition: opacity 400ms var(--ease-out);
+    }
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+// A slowly rotating gradient border. Uses ::after.
+@mixin conic-border($speed: 8s) {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--fx-angle, 0deg),
+      transparent 0 40%,
+      var(--color-accent-ink) 55%,
+      var(--color-accent) 70%,
+      transparent 85%
+    );
+    pointer-events: none;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+
+    @include motion-ok {
+      animation: fx-spin $speed linear infinite;
+    }
+  }
+}
+
+// Drifts toward the pointer (data-fx-magnet).
+@mixin magnetic {
+  translate: var(--tx, 0px) var(--ty, 0px);
+}

@@ -1,0 +1,314 @@
+@use "../../styles/mixins" as *;
+
+.form {
+  position: relative;
+  display: grid;
+  gap: var(--space-s);
+}
+
+.form[data-compact] {
+  gap: var(--space-xs);
+}
+
+// Bot trap: invisible and skipped by keyboard and screen readers.
+.hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.alert {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid color-mix(in srgb, #ef4444 55%, transparent);
+  border-radius: var(--radius-m);
+  background: color-mix(in srgb, #ef4444 12%, transparent);
+  color: var(--color-text);
+  font-size: var(--step-small);
+}
+
+.services {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: var(--space-xs);
+  padding: 0;
+  font-size: var(--step-small);
+  font-weight: 600;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.5rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.55rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-canvas) 40%, transparent);
+  font-size: var(--step-small);
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+
+  @include motion-ok {
+    transition:
+      border-color var(--dur-quick) var(--ease-out),
+      background-color var(--dur-quick) var(--ease-out),
+      transform var(--dur-quick) var(--ease-spring);
+  }
+
+  &:hover {
+    border-color: var(--color-accent-ink);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:has(.chipInput:checked) {
+    border-color: var(--color-accent-ink);
+    background: rgb(var(--accent-ink-rgb) / 0.14);
+  }
+
+  &:has(.chipInput:focus-visible) {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 2px;
+  }
+}
+
+.chipInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chipIcon {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent-ink);
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+.chipTick {
+  display: none;
+  width: 0.9rem;
+  height: 0.9rem;
+  color: var(--color-accent-ink);
+
+  .chip:has(.chipInput:checked) & {
+    display: block;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-s);
+
+  @include up(sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.field {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: var(--step-small);
+  font-weight: 600;
+}
+
+.optional {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.input {
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-m);
+  background: color-mix(in srgb, var(--color-canvas) 65%, transparent);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.75;
+  }
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--color-accent-ink) 50%, var(--color-border-strong));
+  }
+
+  &:focus-visible {
+    border-color: var(--color-accent-ink);
+    outline: 2px solid color-mix(in srgb, var(--color-accent-ink) 40%, transparent);
+    outline-offset: 1px;
+  }
+
+  &[aria-invalid="true"] {
+    border-color: color-mix(in srgb, #ef4444 80%, var(--color-text));
+  }
+}
+
+textarea.input {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.error {
+  color: color-mix(in srgb, #ef4444 70%, var(--color-text));
+  font-size: var(--step-label);
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+  line-height: 1.5;
+
+  a {
+    color: var(--color-text);
+  }
+}
+
+.checkbox {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0.15rem 0 0;
+  accent-color: var(--color-accent);
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+  border: 0;
+  border-radius: var(--radius-m);
+  background: var(--color-accent);
+  color: #fff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0.9rem 2rem -1rem rgb(var(--accent-rgb) / 0.9);
+
+  @include motion-ok {
+    transition:
+      transform var(--dur-quick) var(--ease-spring),
+      filter var(--dur-quick) var(--ease-out);
+  }
+
+  &:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: progress;
+    opacity: 0.75;
+    transform: none;
+  }
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgb(255 255 255 / 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.success {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-l) var(--space-s);
+  text-align: center;
+}
+
+.successIcon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: var(--space-2xs);
+  border-radius: 50%;
+  background: rgb(var(--accent-ink-rgb) / 0.16);
+  color: var(--color-accent-ink);
+
+  svg {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  @include motion-ok {
+    animation: success-pop 520ms var(--ease-spring);
+  }
+}
+
+@keyframes success-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+.successTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--step-h3);
+  font-weight: 600;
+}
+
+.successText {
+  max-width: 28rem;
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,136 @@
+@use "../../../styles/mixins" as *;
+
+$motion-on: ':root[data-js]:not([data-motion="paused"])';
+
+.section {
+  padding-block: var(--space-section);
+  border-top: 1px solid var(--color-border);
+  background:
+    radial-gradient(60% 50% at 0% 100%, var(--color-accent-soft), transparent 70%),
+    var(--color-canvas);
+}
+
+.header {
+  max-width: 46rem;
+  margin-bottom: var(--space-2xl);
+
+  h2 {
+    margin-bottom: var(--space-s);
+  }
+
+  p {
+    color: var(--color-text-muted);
+    font-size: var(--step-lead);
+    line-height: 1.55;
+  }
+}
+
+.track {
+  position: relative;
+}
+
+// Vertical on phones, horizontal through the step markers on desktop.
+.line {
+  --line-from: scaleY(0);
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.375rem;
+  width: 2px;
+  background: var(--gradient-brand);
+  opacity: 0.7;
+  transform-origin: 50% 0;
+
+  @include up(lg) {
+    --line-from: scaleX(0);
+
+    top: 1.375rem;
+    right: calc(20% - 1.375rem);
+    bottom: auto;
+    width: auto;
+    height: 2px;
+    transform-origin: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #{$motion-on} .line {
+    transform: var(--line-from);
+    transition: transform 1.6s var(--ease-out) 200ms;
+  }
+
+  #{$motion-on} [data-visible] > .line {
+    transform: none;
+  }
+}
+
+.steps {
+  position: relative;
+  display: grid;
+  gap: var(--space-l);
+
+  @include up(lg) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-m);
+  }
+}
+
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-2xs);
+  padding-left: 4rem;
+
+  @include up(lg) {
+    padding-top: 4.25rem;
+    padding-left: 0;
+  }
+}
+
+.node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: 0 0 0 6px var(--color-canvas);
+  color: var(--color-accent-ink);
+  font-family: var(--font-family-display);
+  font-weight: 650;
+}
+
+.stepTitle {
+  font-size: var(--step-h3);
+}
+
+.stepBody {
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+// --- Part 6: each step marker lights up as it reaches the middle ---------------
+.node {
+  @include scroll-driven {
+    animation: node-on linear both;
+    animation-timeline: view();
+    animation-range: entry 100% cover 55%;
+  }
+}
+
+@keyframes node-on {
+  to {
+    border-color: transparent;
+    background-color: var(--color-accent);
+    box-shadow:
+      0 0 0 6px var(--color-canvas),
+      var(--glow-accent);
+    color: var(--color-on-accent);
+  }
+}

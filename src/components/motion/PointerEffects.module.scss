@@ -1,0 +1,49 @@
+.halo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-quick) var(--ease-out);
+
+  &[data-visible] {
+    opacity: 1;
+  }
+
+  &[data-state="hidden"] {
+    opacity: 0;
+  }
+}
+
+.ring {
+  position: absolute;
+  top: -1.125rem;
+  left: -1.125rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--color-accent) 25%, transparent);
+  transition:
+    transform var(--dur-base) var(--ease-spring),
+    background-color var(--dur-quick) var(--ease-out);
+
+  .halo[data-state="action"] & {
+    transform: scale(1.6);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  }
+}
+
+:root[data-motion="paused"] .halo {
+  display: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .halo {
+    display: none;
+  }
+}

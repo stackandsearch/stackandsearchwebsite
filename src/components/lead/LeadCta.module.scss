@@ -1,0 +1,129 @@
+@use "../../styles/mixins" as *;
+
+.card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--space-l);
+  margin-block-end: clamp(2.5rem, 6vw, 4.5rem);
+  padding: clamp(1.5rem, 5vw, 4rem);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: clamp(1.25rem, 3vw, 2rem);
+  background:
+    radial-gradient(70% 90% at 0% 0%, rgb(var(--accent-rgb) / 0.32), transparent 70%),
+    radial-gradient(60% 80% at 100% 100%, rgb(var(--accent-ink-rgb) / 0.1), transparent 70%),
+    var(--color-surface);
+  scroll-margin-top: calc(var(--header-h) + var(--space-s));
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+}
+
+.title {
+  margin-bottom: var(--space-s);
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.titleLine {
+  display: block;
+}
+
+.text {
+  max-width: 36rem;
+  color: var(--color-text-muted);
+  font-size: var(--step-lead);
+}
+
+.points {
+  display: grid;
+  gap: var(--space-xs);
+  margin: var(--space-m) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.point {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 500;
+}
+
+.pointIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: rgb(var(--accent-ink-rgb) / 0.16);
+  color: var(--color-accent-ink);
+
+  svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+}
+
+.alt {
+  margin-top: var(--space-m);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+
+  a {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+}
+
+.panel {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: color-mix(in srgb, var(--color-canvas) 55%, transparent);
+  box-shadow: 0 2rem 4rem -2.5rem rgb(0 0 0 / 0.6);
+
+  @supports (backdrop-filter: blur(1px)) {
+    backdrop-filter: blur(14px);
+  }
+}
+
+// Part D: email, social icons and legal links.
+.email {
+  margin-top: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+  overflow-wrap: anywhere;
+
+  a {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+}
+
+.socials {
+  margin-top: var(--space-m);
+}
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin-top: var(--space-m);
+  font-size: var(--step-label);
+
+  a {
+    color: var(--color-text-muted);
+  }
+}
+
+// More room between the email line and the social icons.
+.copy .socials {
+  margin-top: 1.5rem;
+}

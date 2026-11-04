@@ -1,0 +1,100 @@
+@use "../../styles/mixins" as *;
+
+.field {
+  position: absolute;
+  z-index: -1;
+  width: min(48rem, 90vw);
+  aspect-ratio: 1;
+  opacity: 0.75;
+  pointer-events: none;
+  view-timeline-name: --orbit;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+
+  @include scroll-driven {
+    animation: orbit-turn linear both;
+    animation-timeline: --orbit;
+    animation-range: cover 0% cover 100%;
+  }
+}
+
+@keyframes orbit-turn {
+  from {
+    transform: rotate(-18deg) scale(0.9);
+  }
+
+  to {
+    transform: rotate(28deg) scale(1.06);
+  }
+}
+
+.ringFaint {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.ringDash {
+  stroke: var(--color-border-strong);
+  stroke-dasharray: 2 10;
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.ring {
+  stroke: rgb(var(--accent-rgb) / 0.35);
+  stroke-width: 1;
+}
+
+.ringSecondary {
+  stroke: rgb(var(--secondary-rgb) / 0.35);
+  stroke-width: 1;
+}
+
+.constellation {
+  stroke: rgb(var(--accent-rgb) / 0.5);
+  stroke-linejoin: round;
+  stroke-width: 1;
+
+  @include scroll-driven {
+    stroke-dasharray: 900;
+    animation: draw-line linear both;
+    animation-timeline: --orbit;
+    animation-range: entry 10% cover 50%;
+  }
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 900;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.star {
+  fill: var(--color-text);
+  opacity: 0.7;
+}
+
+.core {
+  fill: var(--color-accent-soft);
+  stroke: rgb(var(--accent-rgb) / 0.5);
+}
+
+.planetAccent {
+  fill: var(--color-accent);
+}
+
+.planetSecondary {
+  fill: var(--color-secondary);
+}
+
+.planetHighlight {
+  fill: var(--color-highlight);
+}

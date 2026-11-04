@@ -1,0 +1,46 @@
+// Brand light effects from the active colour channels: indigo glows with a
+// touch of mint. Gradients are light sources only, never behind text.
+
+@mixin dark-effects {
+  --color-accent-soft: rgb(var(--accent-rgb) / 0.18);
+  --color-secondary-soft: rgb(var(--secondary-rgb) / 0.14);
+  --color-highlight-soft: rgb(var(--highlight-ink-rgb) / 0.14);
+  --grid-line: rgb(255 255 255 / 0.045);
+  --glare-color: rgb(255 255 255 / 0.1);
+  --glow-accent: 0 0 32px rgb(var(--accent-rgb) / 0.45);
+  --glow-page:
+    radial-gradient(50% 40% at 85% 0%, rgb(var(--accent-rgb) / 0.24), transparent 70%),
+    radial-gradient(40% 35% at 0% 20%, rgb(var(--highlight-ink-rgb) / 0.1), transparent 70%);
+  --icon-accent: var(--color-accent-ink);
+}
+
+@mixin light-effects {
+  --color-accent-soft: rgb(var(--accent-rgb) / 0.1);
+  --color-secondary-soft: rgb(var(--secondary-rgb) / 0.1);
+  --color-highlight-soft: rgb(var(--highlight-ink-rgb) / 0.1);
+  --grid-line: rgb(var(--accent-rgb) / 0.08);
+  --glare-color: rgb(var(--accent-rgb) / 0.12);
+  --glow-accent: 0 0 24px rgb(var(--accent-rgb) / 0.28);
+  --glow-page:
+    radial-gradient(50% 40% at 85% 0%, rgb(var(--accent-rgb) / 0.12), transparent 70%),
+    radial-gradient(40% 35% at 0% 20%, rgb(var(--highlight-ink-rgb) / 0.08), transparent 70%);
+  --icon-accent: var(--color-accent);
+}
+
+:root {
+  @include dark-effects;
+}
+
+:root[data-theme="light"] {
+  @include light-effects;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    @include light-effects;
+  }
+}
+
+.surface-dark {
+  @include dark-effects;
+}

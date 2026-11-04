@@ -1,0 +1,240 @@
+@use "../../../styles/mixins" as *;
+
+.section {
+  padding-block: var(--space-section);
+  border-top: 1px solid var(--color-border);
+}
+
+.header {
+  max-width: 46rem;
+  margin-bottom: var(--space-2xl);
+
+  h2 {
+    margin-bottom: var(--space-s);
+  }
+
+  p {
+    color: var(--color-text-muted);
+    font-size: var(--step-lead);
+    line-height: 1.55;
+  }
+}
+
+// Build (wide) and Run side by side on desktop; Grow spans the full width.
+.groups {
+  display: grid;
+  gap: var(--space-xl);
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--space-l);
+  }
+}
+
+.group {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-s);
+}
+
+.group[data-group="grow"] {
+  @include up(lg) {
+    grid-column: 1 / -1;
+  }
+}
+
+.groupHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3xs) var(--space-s);
+}
+
+.groupLabel {
+  font-family: var(--font-family-display);
+  font-size: var(--step-h3);
+  font-weight: 600;
+}
+
+.groupIntro {
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.cards {
+  display: grid;
+  gap: var(--space-s);
+}
+
+.group[data-group="grow"] .cards {
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+}
+
+.cardItem {
+  display: grid;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-l);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    box-shadow: var(--shadow-2);
+  }
+
+  // The stretched link takes focus; show the ring on the whole card.
+  &:has(.link:focus-visible) {
+    @include focus-ring;
+  }
+}
+
+.group[data-group="build"] .card {
+  background:
+    radial-gradient(80% 70% at 100% 0%, var(--color-accent-soft), transparent 60%),
+    var(--color-surface);
+}
+
+.group[data-group="run"] .card {
+  background:
+    radial-gradient(80% 70% at 100% 0%, var(--color-secondary-soft), transparent 60%),
+    var(--color-surface);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: var(--space-2xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-ink);
+
+  svg {
+    width: 1.625rem;
+    height: 1.625rem;
+  }
+
+  @include motion-ok {
+    transition: transform var(--dur-base) var(--ease-spring);
+  }
+}
+
+.card:hover .icon {
+  transform: translateY(-3px) scale(1.06) rotate(-3deg);
+}
+
+.title {
+  font-size: var(--step-h3);
+}
+
+.link {
+  color: var(--color-text);
+  text-decoration: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.summary {
+  color: var(--color-text-muted);
+}
+
+.includes {
+  display: grid;
+  gap: var(--space-2xs) var(--space-s);
+  margin-top: var(--space-2xs);
+
+  @include up(sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--step-small);
+    font-weight: 500;
+  }
+}
+
+.includeIcon,
+.timelineIcon {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-accent-ink);
+}
+
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: auto;
+  padding-top: var(--space-s);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+// --- Part 6: Build from the left, Run from the right, Grow rises ---------------
+.group[data-group="build"] {
+  @include scroll-driven {
+    animation: slide-from-left linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+.group[data-group="run"] {
+  @include scroll-driven {
+    animation: slide-from-right linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+.group[data-group="grow"] {
+  @include scroll-driven {
+    animation: rise-scale linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    opacity: 0.2;
+    transform: perspective(1200px) translate3d(-6%, 0, 0) rotateY(8deg);
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    opacity: 0.2;
+    transform: perspective(1200px) translate3d(6%, 0, 0) rotateY(-8deg);
+  }
+}
+
+@keyframes rise-scale {
+  from {
+    opacity: 0.2;
+    transform: translate3d(0, 4rem, 0) scale(0.95);
+  }
+}

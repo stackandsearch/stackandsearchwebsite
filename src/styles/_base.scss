@@ -1,0 +1,131 @@
+@use "mixins" as *;
+
+html {
+  scroll-padding-top: calc(var(--header-h) + var(--space-s));
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+// Stop the page scrolling behind the open mobile menu.
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="paused"]) {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-family-text);
+  font-size: var(--step-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+main:focus {
+  outline: none;
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  color: var(--color-text);
+}
+
+.container {
+  width: min(100% - 2 * var(--page-margin), var(--content-max));
+  margin-inline: auto;
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-2xs);
+  left: var(--space-2xs);
+  z-index: var(--z-overlay);
+  padding: var(--space-xs) var(--space-s);
+  border-radius: var(--radius-s);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+
+  &:focus,
+  &:focus-visible {
+    transform: translateY(0);
+  }
+}
+
+// Reduced motion: the OS setting or the on-page pause control ends animations
+// immediately (final state shown) instead of freezing them mid-way.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:root[data-motion="paused"] *,
+:root[data-motion="paused"] *::before,
+:root[data-motion="paused"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+// Part 11: how much space the header currently takes at the top of the
+// screen (0 while it is hidden). Pinned sections use it to fill the gap.
+:root {
+  --header-offset: var(--header-h);
+}
+
+:root[data-header-hidden] {
+  --header-offset: 0px;
+}
+
+// Part 11b: decorative effects (side slide-ins, orbit lines, glows, the 3D
+// laptop tilt) can reach past the screen edge on narrow screens. Trim them
+// sideways at page level so the page never scrolls sideways or zooms out on
+// phones. `clip` (unlike `hidden`) is not a scroll container, so sticky
+// sections and scroll-linked animations keep working.
+@supports (overflow-x: clip) {
+  main,
+  #site-footer,
+  body > footer {
+    overflow-x: clip;
+  }
+}
+
+// Part 12: no page scrolling behind the lead popup.
+:root:has(dialog[data-lead-popup][open]) {
+  overflow: hidden;
+}
+
+// Part D: the contact page has its own form, so hide the footer form card.
+body:has([data-lead-form="contact"]) #get-started {
+  display: none;
+}

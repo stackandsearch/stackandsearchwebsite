@@ -1,0 +1,103 @@
+@use "../../styles/mixins" as *;
+
+.dialog {
+  width: min(100% - 1.5rem, 40rem);
+  max-width: none;
+  max-height: min(92svh, 58rem);
+  margin: auto;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  background-image: var(--glow-page);
+  color: var(--color-text);
+  box-shadow: var(--shadow-3);
+
+  &::backdrop {
+    background: rgb(7 10 31 / 0.6);
+  }
+
+  &[open] {
+    @include motion-ok {
+      animation: popup-in 480ms var(--ease-spring);
+    }
+  }
+
+  // Phones: a sheet that slides up from the bottom.
+  @include down(sm) {
+    width: 100%;
+    max-height: 92svh;
+    margin: auto 0 0;
+    border-bottom: 0;
+    border-radius: var(--radius-l) var(--radius-l) 0 0;
+  }
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .dialog::backdrop {
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.97);
+  }
+}
+
+.panel {
+  position: relative;
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+}
+
+.close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+}
+
+.eyebrow {
+  display: inline-flex;
+  margin-bottom: var(--space-xs);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: rgb(var(--accent-ink-rgb) / 0.14);
+  color: var(--color-accent-ink);
+  font-size: var(--step-label);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.title {
+  margin-bottom: var(--space-2xs);
+  padding-right: 2.75rem;
+  font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2rem);
+  line-height: 1.15;
+}
+
+.text {
+  margin-bottom: var(--space-m);
+  color: var(--color-text-muted);
+}
