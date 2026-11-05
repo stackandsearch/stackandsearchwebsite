@@ -5,7 +5,7 @@ import { formatDate } from "@/content/blog";
 import { linkForLabel, type ServiceLink } from "@/content/services";
 import { stripTags, type WpCategory, type WpPost } from "@/lib/wordpress";
 import { blogPostingSchema, breadcrumbSchema, graph } from "@/lib/seo/structured-data";
-import { BlogRow } from "./BlogRow";
+import { BlogCard } from "./BlogCard";
 import { PageHeader } from "./PageHeader";
 import { SectionHead } from "./parts";
 import styles from "./Pages.module.scss";
@@ -85,15 +85,6 @@ export function BlogPostPage({ post, related, showCategory }: { post: WpPost; re
   const crumbs = [{ label: "Home", href: "/" }, { label: "Blog", href: "/blog/" }, { label: post.title }];
   const { html, headings } = withHeadingIds(post.contentHtml);
   const services = relatedServices(post.category);
-  const toRow = (item: WpPost) => ({
-    slug: item.slug,
-    title: item.title,
-    description: item.description,
-    date: item.date,
-    dateLabel: formatDate(item.date),
-    readingMinutes: item.readingMinutes,
-    category: item.category,
-  });
 
   return (
     <PageMain>
@@ -121,7 +112,7 @@ export function BlogPostPage({ post, related, showCategory }: { post: WpPost; re
         crumbs={crumbs}
         eyebrow={showCategory && post.category ? post.category.name : "Blog"}
         title={post.title}
-        lead={post.description}
+        lead={post.excerpt}
       >
         <p className={styles.meta}>
           <time dateTime={post.publishedAt}>{formatDate(post.date)}</time>
@@ -204,13 +195,13 @@ export function BlogPostPage({ post, related, showCategory }: { post: WpPost; re
         <section className={styles.section} aria-labelledby="keep-reading-title">
           <div className="container">
             <SectionHead id="keep-reading-title" kicker="Keep reading" title="More from the blog" />
-            <ol className={styles.postList}>
-              {related.map((item) => (
+            <ul className={styles.cardGrid}>
+              {related.map((item, index) => (
                 <li key={item.slug}>
-                  <BlogRow post={toRow(item)} showCategory={showCategory} level={3} />
+                  <BlogCard post={item} showCategory={showCategory} level={3} index={index} />
                 </li>
               ))}
-            </ol>
+            </ul>
           </div>
         </section>
       ) : null}

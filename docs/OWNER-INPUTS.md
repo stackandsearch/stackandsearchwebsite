@@ -85,3 +85,12 @@ Each service page states typical timelines and ways of working. Confirm or edit 
 - The featured image shows on the blog list and at the top of the article.
 - Keep the WordPress.com site set to "Discourage search engines" so only stackandsearch.com is indexed.
 - blog.stackandsearch.com redirects to /blog/ (Netlify domain alias + CNAME `blog` at Hostinger).
+
+## Analytics (GTM / GA4)
+
+- GTM containers are listed in `src/content/analytics.ts` and load only on stackandsearch.com.
+- GA4 is set up inside GTM (Google tag with the G- Measurement ID) in ONE container only.
+- Consent Mode defaults: analytics granted (denied in the EEA, UK and Switzerland), advertising storage denied.
+- Enquiries push `generate_lead` (with `form_location`) to the data layer.
+- Before adding ad pixels or remarketing, add a cookie consent banner and update the privacy and cookie policies.
+- Search Console: Domain property verified with a TXT record at Hostinger.

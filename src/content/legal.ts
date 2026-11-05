@@ -19,7 +19,7 @@ export const privacyPolicy: LegalDoc = {
   title: "Privacy policy",
   description: `How ${site.name} collects, uses and protects personal information sent through this website.`,
   intro: `This policy explains what personal information ${site.name} collects through this website, why we collect it, and the choices you have.`,
-  updated: "4 November 2026",
+  updated: "5 November 2026",
   sections: [
     {
       heading: "Information we collect",
@@ -42,7 +42,7 @@ export const privacyPolicy: LegalDoc = {
     {
       heading: "Who we share it with",
       paragraphs: [
-        "We share information only with service providers that help us run this website and handle enquiries, such as hosting, email, spreadsheet and customer-management tools, and only as much as they need to provide their service. We may also disclose information where the law requires it.",
+        "We share information only with service providers that help us run this website and handle enquiries, such as hosting, email, spreadsheet, analytics and customer-management tools, and only as much as they need to provide their service. We may also disclose information where the law requires it.",
       ],
     },
     {
@@ -58,7 +58,8 @@ export const privacyPolicy: LegalDoc = {
     {
       heading: "Analytics",
       paragraphs: [
-        "We don't currently use analytics or advertising cookies. If we add them, we'll update this policy and ask for your consent where required.",
+        "We use Google Analytics 4, loaded through Google Tag Manager, to understand how the site is used: which pages are viewed, how visitors found us and whether enquiries are sent. Google Analytics sets cookies on our domain (_ga and _ga_*) and processes information such as your approximate location, device, browser and the pages you visit.",
+        "We don't use Google Analytics for advertising, and we don't send it your name, email address or the contents of any enquiry. You can block these cookies in your browser settings, or install Google's Analytics opt-out add-on from tools.google.com/dlpage/gaoptout.",
       ],
     },
     {
@@ -138,7 +139,7 @@ export const cookiePolicy: LegalDoc = {
   description: `The cookies and browser storage the ${site.name} website uses, and why.`,
   intro:
     "This policy lists the small items this website stores in your browser, what each one is for and how long it lasts. We keep them to a minimum, and none are used for advertising.",
-  updated: "4 November 2026",
+  updated: "5 November 2026",
   sections: [
     {
       heading: "Cookies and browser storage",
@@ -154,12 +155,13 @@ export const cookiePolicy: LegalDoc = {
         "ss-lead-submitted (browser storage): remembers that you've already sent an enquiry, so the pop-up doesn't show again.",
         "ss-attr-session (session storage, until you close the tab): marks the start of a visit, so a new visit can be told apart from moving between pages.",
         "Theme preference (browser storage): remembers whether you chose the light or dark theme.",
+        "_ga and _ga_* (Google Analytics cookies, up to two years): tell visits apart so we can count visitors and see which pages are useful. They don't contain your name or contact details.",
       ],
     },
     {
       heading: "What we don't use",
       paragraphs: [
-        "We don't use advertising cookies, and this website doesn't set third-party cookies. We don't currently use analytics cookies; if we add them, we'll list them here and ask for your consent where required.",
+        "We don't use advertising cookies, and we don't sell information collected through cookies. Google Analytics is the only outside service that stores cookies here, and it stores them on our domain.",
       ],
     },
     {

@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { POSTS_PER_PAGE } from "@/content/blog/settings";
 import { WORDPRESS_SITE } from "@/content/blog/source";
 
-// Unknown article addresses (/blog/<slug>/ with no WordPress post) get a real
-// 404 status instead of a 200 page that says "not found".
+// Unknown article addresses (/blog/<slug>/) and blog pages past the last one
+// (/blog/page/<n>/) get a real 404 status; /blog/page/1/ goes to /blog/.
 
 const MAX_AGE = 5 * 60 * 1000;
 let known: { slugs: Set<string>; at: number } | null = null;
@@ -23,16 +24,30 @@ async function knownSlugs() {
   }
 }
 
+const notFound = (request: NextRequest) => NextResponse.rewrite(new URL("/__no-such-page__/", request.url));
+
 export async function proxy(request: NextRequest) {
-  const match = /^\/blog\/([^/]+)\/?$/.exec(request.nextUrl.pathname);
+  const path = request.nextUrl.pathname;
+
+  const pageMatch = /^\/blog\/page\/([^/]+)\/?$/.exec(path);
+  if (pageMatch) {
+    if (pageMatch[1] === "1") return NextResponse.redirect(new URL("/blog/", request.url), 308);
+    const slugs = await knownSlugs();
+    if (slugs) {
+      const total = Math.max(1, Math.ceil(slugs.size / POSTS_PER_PAGE));
+      const page = /^\d+$/.test(pageMatch[1]) ? Number(pageMatch[1]) : NaN;
+      if (!(page >= 2 && page <= total)) return notFound(request);
+    }
+    return NextResponse.next();
+  }
+
+  const match = /^\/blog\/([^/]+)\/?$/.exec(path);
   if (!match) return NextResponse.next();
   const slugs = await knownSlugs();
-  if (slugs && !slugs.has(decodeURIComponent(match[1]))) {
-    return NextResponse.rewrite(new URL("/__no-such-article__/", request.url));
-  }
+  if (slugs && !slugs.has(decodeURIComponent(match[1]))) return notFound(request);
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/blog/:slug", "/blog/:slug/"],
+  matcher: ["/blog/:slug", "/blog/:slug/", "/blog/page/:page", "/blog/page/:page/"],
 };

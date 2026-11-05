@@ -2,7 +2,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { WORDPRESS_SITE } from "@/content/blog/source";
 
 // Blog posts from the WordPress.com site (headless): written in WordPress,
-// shown on /blog/ in this site's design. Cached, refreshed every 15 minutes.
+// shown on /blog/ in this site's design. Cached, refreshed every 5 minutes.
 
 const API = `https://public-api.wordpress.com/wp/v2/sites/${WORDPRESS_SITE}`;
 
@@ -21,6 +21,7 @@ export interface WpImage {
 export interface WpPost {
   slug: string;
   title: string;
+  excerpt: string;
   description: string;
   contentHtml: string;
   date: string;
@@ -91,12 +92,16 @@ export function stripTags(html: string) {
     .trim();
 }
 
-// A meta-description-length summary from the WordPress excerpt.
-function summary(html: string) {
-  const text = stripTags(html)
+// The excerpt as plain text, without WordPress's "[…]" or "Continue reading".
+function cleanExcerpt(html: string) {
+  return stripTags(html)
     .replace(/\s*\[(…|\.\.\.)\]\s*$/, "")
     .replace(/\s*Continue reading.*$/i, "")
     .trim();
+}
+
+// Meta-description length (Google shows about 155 to 160 characters).
+function metaDescription(text: string) {
   if (text.length <= 160) return text;
   const cut = text.slice(0, 157);
   const space = cut.lastIndexOf(" ");
@@ -136,11 +141,12 @@ export async function getWpPosts(): Promise<WpPost[]> {
       getJson<RawCategory[]>("/categories?per_page=100&_fields=id,name,slug"),
     ]);
     const media = await featuredImages(posts.map((post) => post.featured_media ?? 0).filter((id) => id > 0));
-    cacheLife({ stale: 300, revalidate: 900, expire: 86400 });
+    cacheLife({ stale: 60, revalidate: 300, expire: 86400 });
 
     const categoryById = new Map(categories.map((item) => [item.id, { name: decodeEntities(item.name), slug: item.slug }]));
     return posts.map((post) => {
       const words = stripTags(post.content.rendered).split(" ").filter(Boolean).length;
+      const excerpt = cleanExcerpt(post.excerpt.rendered);
       const category =
         (post.categories ?? [])
           .map((id) => categoryById.get(id))
@@ -150,7 +156,8 @@ export async function getWpPosts(): Promise<WpPost[]> {
       return {
         slug: post.slug,
         title: stripTags(post.title.rendered),
-        description: summary(post.excerpt.rendered),
+        excerpt,
+        description: metaDescription(excerpt),
         contentHtml: post.content.rendered,
         date: post.date.slice(0, 10),
         modified: post.modified.slice(0, 10),

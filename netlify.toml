@@ -20,3 +20,10 @@
   to = "https://stackandsearch.com/blog/:splat"
   status = 301
   force = true
+
+# The Netlify address -> the real domain, so search engines see one copy.
+[[redirects]]
+  from = "https://stackandsearch.netlify.app/*"
+  to = "https://stackandsearch.com/:splat"
+  status = 301
+  force = true

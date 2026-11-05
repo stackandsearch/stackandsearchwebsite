@@ -1,3 +1,4 @@
+import { Analytics } from "@/components/analytics/Analytics";
 import "./globals.scss";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <PreferenceScript />
       </head>
       <body>
+        <Analytics />
         <div className="scroll-progress" aria-hidden="true" />
         <a className="skip-link" href="#main">
           Skip to content
