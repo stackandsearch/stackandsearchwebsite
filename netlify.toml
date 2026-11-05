@@ -1,0 +1,9 @@
+# Netlify build settings. This file overrides the settings in the Netlify UI.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Netlify's Next.js runtime: turns the Next.js build into real pages and
+# server functions (lead forms, 404 page, images).
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
