@@ -6,6 +6,18 @@ import { WORDPRESS_SITE } from "@/content/blog/source";
 
 const API = `https://public-api.wordpress.com/wp/v2/sites/${WORDPRESS_SITE}`;
 
+export interface WpCategory {
+  name: string;
+  slug: string;
+}
+
+export interface WpImage {
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 export interface WpPost {
   slug: string;
   title: string;
@@ -13,25 +25,38 @@ export interface WpPost {
   contentHtml: string;
   date: string;
   modified: string;
-  tags: string[];
-  image: string;
+  publishedAt: string;
+  modifiedAt: string;
+  category: WpCategory | null;
+  image: WpImage | null;
   readingMinutes: number;
 }
 
 interface RawPost {
   slug: string;
   date: string;
+  date_gmt?: string;
   modified: string;
+  modified_gmt?: string;
   title: { rendered: string };
   excerpt: { rendered: string };
   content: { rendered: string };
-  tags?: number[];
+  categories?: number[];
+  featured_media?: number;
   jetpack_featured_media_url?: string;
 }
 
-interface RawTag {
+interface RawCategory {
   id: number;
   name: string;
+  slug: string;
+}
+
+interface RawMedia {
+  id: number;
+  alt_text?: string;
+  source_url?: string;
+  media_details?: { width?: number; height?: number };
 }
 
 const ENTITIES: Record<string, string> = {
@@ -78,26 +103,50 @@ function summary(html: string) {
   return `${cut.slice(0, space > 100 ? space : 157)}…`;
 }
 
+const iso = (gmt: string | undefined, local: string) => (gmt ? `${gmt.replace(/Z$/, "")}Z` : local);
+
 async function getJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API}${path}`, { headers: { accept: "application/json" } });
   if (!response.ok) throw new Error(`WordPress.com API returned ${response.status} for ${path}`);
   return (await response.json()) as T;
 }
 
+async function featuredImages(ids: number[]) {
+  const images = new Map<number, RawMedia>();
+  if (ids.length === 0) return images;
+  try {
+    const media = await getJson<RawMedia[]>(
+      `/media?include=${ids.join(",")}&per_page=100&_fields=id,alt_text,source_url,media_details`,
+    );
+    for (const item of media) images.set(item.id, item);
+  } catch (error) {
+    console.error("[blog] couldn't load featured images:", error);
+  }
+  return images;
+}
+
 export async function getWpPosts(): Promise<WpPost[]> {
   "use cache";
   cacheTag("wordpress");
   try {
-    const [posts, tags] = await Promise.all([
+    const [posts, categories] = await Promise.all([
       getJson<RawPost[]>(
-        "/posts?per_page=100&_fields=slug,date,modified,title,excerpt,content,tags,jetpack_featured_media_url",
+        "/posts?per_page=100&_fields=slug,date,date_gmt,modified,modified_gmt,title,excerpt,content,categories,featured_media,jetpack_featured_media_url",
       ),
-      getJson<RawTag[]>("/tags?per_page=100&_fields=id,name"),
+      getJson<RawCategory[]>("/categories?per_page=100&_fields=id,name,slug"),
     ]);
+    const media = await featuredImages(posts.map((post) => post.featured_media ?? 0).filter((id) => id > 0));
     cacheLife({ stale: 300, revalidate: 900, expire: 86400 });
-    const tagNames = new Map(tags.map((tag) => [tag.id, decodeEntities(tag.name)]));
+
+    const categoryById = new Map(categories.map((item) => [item.id, { name: decodeEntities(item.name), slug: item.slug }]));
     return posts.map((post) => {
       const words = stripTags(post.content.rendered).split(" ").filter(Boolean).length;
+      const category =
+        (post.categories ?? [])
+          .map((id) => categoryById.get(id))
+          .find((item): item is WpCategory => item !== undefined && item.slug !== "uncategorized") ?? null;
+      const file = post.featured_media ? media.get(post.featured_media) : undefined;
+      const url = file?.source_url || post.jetpack_featured_media_url || "";
       return {
         slug: post.slug,
         title: stripTags(post.title.rendered),
@@ -105,8 +154,17 @@ export async function getWpPosts(): Promise<WpPost[]> {
         contentHtml: post.content.rendered,
         date: post.date.slice(0, 10),
         modified: post.modified.slice(0, 10),
-        tags: (post.tags ?? []).map((id) => tagNames.get(id)).filter((name): name is string => Boolean(name)),
-        image: post.jetpack_featured_media_url ?? "",
+        publishedAt: iso(post.date_gmt, post.date),
+        modifiedAt: iso(post.modified_gmt, post.modified),
+        category,
+        image: url
+          ? {
+              url,
+              alt: decodeEntities(file?.alt_text ?? ""),
+              width: file?.media_details?.width ?? 0,
+              height: file?.media_details?.height ?? 0,
+            }
+          : null,
         readingMinutes: Math.max(1, Math.round(words / 200)),
       };
     });

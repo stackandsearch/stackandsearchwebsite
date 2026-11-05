@@ -30,7 +30,7 @@ async function searchIndex(): Promise<SearchItem[]> {
       group: "Service",
       hint: linkForLabel(content.label)?.summary,
     })),
-    ...posts.map((post) => ({ label: post.title, href: `/blog/${post.slug}/`, group: "Article", hint: post.tags.join(", ") })),
+    ...posts.map((post) => ({ label: post.title, href: `/blog/${post.slug}/`, group: "Article", hint: post.category?.name })),
     { label: "Privacy policy", href: "/privacy-policy/", group: "Page" },
     { label: "Terms of use", href: "/terms/", group: "Page" },
     { label: "Cookie policy", href: "/cookie-policy/", group: "Page" },
