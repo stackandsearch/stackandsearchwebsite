@@ -1,15 +1,5 @@
-import { aeoGeoWhatGoogleSays } from "./aeo-geo-what-google-says";
-import type { BlogPost } from "./types";
-import { websiteRedesignSeoChecklist } from "./website-redesign-seo-checklist";
-
-// Every article. Each also has a route file in src/app/blog/<slug>/page.tsx.
-export const posts: BlogPost[] = [aeoGeoWhatGoogleSays, websiteRedesignSeoChecklist].sort((a, b) =>
-  b.date.localeCompare(a.date),
-);
-
-export function postBySlug(slug: string) {
-  return posts.find((post) => post.slug === slug);
-}
+// Blog page copy and helpers. The posts themselves come from WordPress.com
+// (src/lib/wordpress.ts).
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 

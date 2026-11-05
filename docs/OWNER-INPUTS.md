@@ -75,3 +75,13 @@ Each service page states typical timelines and ways of working. Confirm or edit 
 
 - Lists every cookie and browser storage item the site uses today. Review it with the privacy policy before launch.
 - Update it whenever analytics, chat widgets, embeds or ad pixels are added.
+
+## Blog (WordPress.com)
+
+- Posts are written on the WordPress.com site in `src/content/blog/source.ts` and appear on stackandsearch.com/blog/ within about 15 minutes. No deploy needed.
+- The post's slug becomes its address: /blog/<slug>/. Don't change slugs after publishing.
+- The excerpt is the meta description (aim for 120 to 155 characters).
+- Tags show as labels; tags matching a service ("SEO", "AEO", "GEO", "Paid ads"...) add related-service links.
+- The featured image shows on the blog list and at the top of the article.
+- Keep the WordPress.com site set to "Discourage search engines" so only stackandsearch.com is indexed.
+- blog.stackandsearch.com redirects to /blog/ (Netlify domain alias + CNAME `blog` at Hostinger).

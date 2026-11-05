@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:wp="http://wordpress.org/export/1.2/">
+<channel>
+  <title>Stack &amp; Search</title>
+  <link>https://stackandsearch.com</link>
+  <description>Stack &amp; Search blog</description>
+  <language>en-IN</language>
+  <wp:wxr_version>1.2</wp:wxr_version>
+  <wp:base_site_url>https://stackandsearch.com</wp:base_site_url>
+  <wp:base_blog_url>https://stackandsearch.com</wp:base_blog_url>
+  <wp:author><wp:author_id>1</wp:author_id><wp:author_login><![CDATA[stackandsearch]]></wp:author_login><wp:author_email><![CDATA[stackandsearchteam@gmail.com]]></wp:author_email><wp:author_display_name><![CDATA[Stack and Search]]></wp:author_display_name><wp:author_first_name><![CDATA[]]></wp:author_first_name><wp:author_last_name><![CDATA[]]></wp:author_last_name></wp:author>
+
+  <item>
+    <title><![CDATA[AEO and GEO in 2026: what Google actually says matters]]></title>
+    <dc:creator><![CDATA[stackandsearch]]></dc:creator>
+    <content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Answer engine optimisation (AEO) and generative engine optimisation (GEO) are in almost every agency pitch. In May 2026, Google published its own guide to optimising for generative AI features in Search, including AI Overviews and AI Mode. It's the clearest official statement yet, and it cuts through a lot of noise.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Google's position: it's still SEO</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Google's guide, Optimizing your website for generative AI features on Google Search, explains that its AI features are rooted in the same core ranking and quality systems as regular Search. Its view is that optimising for generative AI search is part of optimising for the search experience, and so it is still SEO.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>That doesn't mean nothing has changed. It means the foundations haven't: useful content, a technically sound website and a trustworthy reputation.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What Google says you don't need to do</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Create llms.txt or other special AI files or markup</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Break content into small chunks for AI systems</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Rewrite pages to target every long-tail phrasing</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Chase mentions that aren't genuine</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Add special schema for AI features: structured data isn't required for them, though it still matters for rich results</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Many of these tactics are sold as AEO and GEO services. For Google's generative AI features, the guide says they aren't necessary.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What Google says to focus on</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Original, non-commodity content that adds insight beyond common knowledge</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Pages that are indexed and eligible to appear with a snippet</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Crawlable pages, semantic HTML and sound JavaScript SEO</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>A good page experience</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Less duplicate content</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>The non-commodity point matters most. Google contrasts generic advice with specific, first-hand content. A page explaining exactly how you solved a customer's problem, with real details, is far harder to replace with an AI summary than another generic list of tips.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Local businesses and online stores</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>For local and product searches, the guide points to Google Business Profile and Merchant Center feeds. If you serve a local area or sell products, keeping those accurate and complete is part of appearing in AI answers.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What about ChatGPT, Perplexity and other assistants?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Google's guide only covers Google Search. Other assistants may weigh signals differently, and none of them sell placement. In practice the same foundations help everywhere: being crawlable, clearly described, consistent across the web and genuinely useful.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Be wary of anyone promising guaranteed mentions in any AI tool. Answers vary by person, wording and time.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">AI agents are coming, slowly</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The guide also includes early advice on AI agents: systems that act on someone's behalf, such as booking a table or comparing products. Google notes that browser agents may read pages through screenshots, the page structure and the accessibility tree.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Google frames this as an emerging area. Sites built with clear structure and good accessibility are already in a strong position.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">A note on FAQ markup</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Separately, Google stopped showing FAQ rich results in Search on 7 May 2026. FAQPage markup is still valid and still describes your page; it just no longer creates the expandable FAQ display. FAQs remain worth writing when they answer real questions.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">A practical checklist</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Check in Search Console that your important pages are indexed</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Fix crawl blocks, slow templates and duplicate pages</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Rewrite generic pages with your own data, examples and opinions</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Keep your Google Business Profile and product feeds accurate</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Use structured data where it accurately describes the page</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Measure visibility across a set of real questions over time, not single screenshots</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sources</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><a href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide">Google Search Central: Optimizing your website for generative AI features on Google Search</a></li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><a href="https://developers.google.com/search/docs/appearance/ai-features">Google Search Central: AI features and your website</a></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->]]></content:encoded>
+    <excerpt:encoded><![CDATA[Google's May 2026 guide to generative AI search says AEO and GEO are still SEO. Here's what it tells site owners to focus on, and which popular tactics it says to skip.]]></excerpt:encoded>
+    <wp:post_id>1</wp:post_id>
+    <wp:post_date><![CDATA[2026-11-04 10:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-11-04 04:30:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[aeo-geo-what-google-says]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="guides"><![CDATA[Guides]]></category>
+    <category domain="post_tag" nicename="aeo"><![CDATA[AEO]]></category>
+    <category domain="post_tag" nicename="geo"><![CDATA[GEO]]></category>
+    <category domain="post_tag" nicename="seo"><![CDATA[SEO]]></category>
+  </item>
+
+  <item>
+    <title><![CDATA[Website redesign without losing SEO: a step-by-step checklist]]></title>
+    <dc:creator><![CDATA[stackandsearch]]></dc:creator>
+    <content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>A redesign is a chance to fix a slow, dated website. It's also the moment many businesses lose rankings they spent years building. Almost every loss comes from avoidable mistakes, so here's the checklist we work through on every redesign.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">1. Benchmark before you change anything</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Export what you have: every URL, its organic traffic and conversions from analytics, its clicks and queries from Search Console, and the pages other websites link to. This is your before picture, and your list of pages that must survive the move.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">2. Build a complete URL inventory</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>List every URL that exists today, including blog posts, PDFs and old campaign pages that are still linked from elsewhere. Crawl the site and combine the crawl with your analytics and Search Console exports, so nothing is missed.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">3. Decide what happens to each page</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Keep: same URL, improved content</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Move: new URL, with a redirect</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Merge: several thin pages combined into one stronger page</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Retire: removed deliberately, redirected to the closest relevant page where one exists</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">4. Map one-step 301 redirects</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Every moved or merged URL needs a permanent (301) redirect to its closest equivalent. Avoid sending everything to the homepage, and avoid chains where one redirect leads to another. Update internal links to point straight at the new URLs.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">5. Protect the content that ranks</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Pages that bring in search traffic rank because of what they say. Keep their main topics, headings and depth. Improve them, but don't cut them down just to fit a new design.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">6. Test everything on staging</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Every redirect resolves in one step to the right page</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Titles, descriptions and headings are in place</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Canonical tags point to the new URLs</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Structured data is valid and matches what the page shows</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Analytics and conversion tracking fire correctly</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Pages are fast on a mid-range phone</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Keep the staging site out of search results, for example with password protection, and make sure that protection doesn't come with you to the live site.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">7. Run launch-day checks</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>robots.txt allows crawling and no page carries a stray noindex</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>The XML sitemap lists the new URLs</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>A sample of old URLs redirects correctly on the live domain</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Forms, payments and tracking work end to end</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>If the domain changed, use Search Console's Change of Address tool</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">8. Monitor for the next four to eight weeks</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Some ranking movement is normal after a big change. Watch Search Console for crawl errors, pages that drop out of the index and queries that lose clicks, and compare traffic and conversions with your benchmark. Problems caught in the first weeks are usually quick to fix.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sources</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><a href="https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes">Google Search Central: Site moves with URL changes</a></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->]]></content:encoded>
+    <excerpt:encoded><![CDATA[Redesigns are when websites most often lose search traffic. Use this checklist to benchmark, map redirects, test on staging and monitor after launch.]]></excerpt:encoded>
+    <wp:post_id>2</wp:post_id>
+    <wp:post_date><![CDATA[2026-11-04 10:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-11-04 04:30:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[website-redesign-seo-checklist]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="guides"><![CDATA[Guides]]></category>
+    <category domain="post_tag" nicename="seo"><![CDATA[SEO]]></category>
+    <category domain="post_tag" nicename="web-development"><![CDATA[Web development]]></category>
+  </item>
+</channel>
+</rss>

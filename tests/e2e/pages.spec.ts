@@ -11,7 +11,7 @@ async function keepPopupClosed(page: Page) {
 
 // Unknown and retired URLs must return a real 404 status.
 test("unknown and old URLs return a real 404", async ({ request }) => {
-  for (const href of ["/this-page-does-not-exist/", "/services/website-development/"]) {
+  for (const href of ["/this-page-does-not-exist/", "/services/website-development/", "/blog/this-post-does-not-exist/"]) {
     const response = await request.get(href);
     expect(response.status(), href).toBe(404);
   }

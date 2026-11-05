@@ -4,8 +4,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { ServiceGraphic } from "@/components/service/ServiceGraphic";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { ArrowIcon } from "@/components/service/ServicePage";
-import { blogIndex, formatDate, posts } from "@/content/blog";
+import { blogIndex, formatDate } from "@/content/blog";
 import { site } from "@/content/site";
+import { getWpPosts } from "@/lib/wordpress";
 import { absoluteUrl } from "@/lib/seo/urls";
 import { breadcrumbSchema, graph, organizationRef } from "@/lib/seo/structured-data";
 import { CtaBand, order, SectionHead } from "./parts";
@@ -13,7 +14,8 @@ import styles from "./Pages.module.scss";
 
 const PATH = "/blog/";
 
-export function BlogIndex() {
+export async function BlogIndex() {
+  const posts = await getWpPosts();
   const crumbs = [{ label: "Home", href: "/" }, { label: "Blog" }];
 
   return (
@@ -53,37 +55,47 @@ export function BlogIndex() {
       <section id="articles" className={styles.section} aria-labelledby="articles-title">
         <div className="container">
           <SectionHead id="articles-title" kicker="Latest" title="Latest articles" />
-          <ul className={styles.postGrid}>
-            {posts.map((post, index) => (
-              <li key={post.slug}>
-                <Link
-                  href={`/blog/${post.slug}/`}
-                  className={styles.postCard}
-                  data-fx-reveal=""
-                  data-fx-spot=""
-                  data-fx-tilt="4"
-                  style={order(index)}
-                >
-                  <span className={styles.tags}>
-                    {post.tags.map((tag) => (
-                      <span key={tag} className={styles.tag}>
-                        {tag}
+          {posts.length === 0 ? (
+            <p className={styles.muted}>New articles are on their way. Check back soon.</p>
+          ) : (
+            <ul className={styles.postGrid}>
+              {posts.map((post, index) => (
+                <li key={post.slug}>
+                  <Link
+                    href={`/blog/${post.slug}/`}
+                    className={styles.postCard}
+                    data-fx-reveal=""
+                    data-fx-spot=""
+                    data-fx-tilt="4"
+                    style={order(index)}
+                  >
+                    {post.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={post.image} alt="" className={styles.postImage} loading="lazy" />
+                    ) : null}
+                    {post.tags.length > 0 ? (
+                      <span className={styles.tags}>
+                        {post.tags.slice(0, 3).map((tag) => (
+                          <span key={tag} className={styles.tag}>
+                            {tag}
+                          </span>
+                        ))}
                       </span>
-                    ))}
-                  </span>
-                  <h2>{post.title}</h2>
-                  <p>{post.description}</p>
-                  <span className={styles.postFoot}>
-                    <time dateTime={post.date}>{formatDate(post.date)}</time>
-                    <span>{post.readingMinutes} min read</span>
-                    <span className={styles.readMore}>
-                      Read article <ArrowIcon />
+                    ) : null}
+                    <h2>{post.title}</h2>
+                    <p>{post.description}</p>
+                    <span className={styles.postFoot}>
+                      <time dateTime={post.date}>{formatDate(post.date)}</time>
+                      <span>{post.readingMinutes} min read</span>
+                      <span className={styles.readMore}>
+                        Read article <ArrowIcon />
+                      </span>
                     </span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
 

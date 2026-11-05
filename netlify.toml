@@ -7,3 +7,16 @@
 # server functions (lead forms, 404 page, images).
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# blog.stackandsearch.com -> the blog on the main site (same path).
+[[redirects]]
+  from = "https://blog.stackandsearch.com/*"
+  to = "https://stackandsearch.com/blog/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://blog.stackandsearch.com/*"
+  to = "https://stackandsearch.com/blog/:splat"
+  status = 301
+  force = true

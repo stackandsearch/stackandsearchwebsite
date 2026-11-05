@@ -2,35 +2,66 @@ import Link from "next/link";
 import { PageMain } from "@/components/page/PageMain";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatDate } from "@/content/blog";
-import type { BlogPost } from "@/content/blog/types";
 import { linkForLabel, type ServiceLink } from "@/content/services";
 import { site } from "@/content/site";
+import { stripTags, type WpPost } from "@/lib/wordpress";
 import { blogPostingSchema, breadcrumbSchema, graph } from "@/lib/seo/structured-data";
 import { PageHeader } from "./PageHeader";
 import { CtaBand } from "./parts";
 import styles from "./Pages.module.scss";
 
-const anchor = (heading: string) =>
-  heading
+const slugify = (text: string) =>
+  text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-export function BlogPostPage({ post }: { post: BlogPost }) {
+// Gives every h2 in the WordPress content an id, for the "On this page" list.
+function withHeadingIds(html: string) {
+  const headings: { id: string; text: string }[] = [];
+  const used = new Set<string>();
+  const out = html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (match, attrs: string, inner: string) => {
+    const text = stripTags(inner);
+    if (!text) return match;
+    const base = slugify(text) || "section";
+    let id = base;
+    for (let n = 2; used.has(id); n += 1) id = `${base}-${n}`;
+    used.add(id);
+    headings.push({ id, text });
+    return `<h2${attrs.replace(/\sid="[^"]*"/i, "")} id="${id}">${inner}</h2>`;
+  });
+  return { html: out, headings };
+}
+
+// Services whose names match the post's tags ("SEO" -> "SEO services").
+function relatedServices(tags: string[]) {
+  const labels = Array.from(new Set(tags.flatMap((tag) => [tag, `${tag} services`])));
+  return labels
+    .map((label) => linkForLabel(label))
+    .filter((link): link is ServiceLink => Boolean(link))
+    .slice(0, 4);
+}
+
+export function BlogPostPage({ post }: { post: WpPost }) {
   const path = `/blog/${post.slug}/`;
   const crumbs = [{ label: "Home", href: "/" }, { label: "Blog", href: "/blog/" }, { label: post.title }];
-  const related = post.related.map((label) => linkForLabel(label)).filter((link): link is ServiceLink => Boolean(link));
+  const { html, headings } = withHeadingIds(post.contentHtml);
+  const related = relatedServices(post.tags);
 
   return (
     <PageMain>
       <JsonLd
         data={graph([
           breadcrumbSchema(crumbs, path),
-          blogPostingSchema({ title: post.title, description: post.description, path, date: post.date }),
+          {
+            ...blogPostingSchema({ title: post.title, description: post.description, path, date: post.date }),
+            dateModified: post.modified,
+            ...(post.image ? { image: post.image } : {}),
+          },
         ])}
       />
 
-      <PageHeader crumbs={crumbs} eyebrow={post.tags.join(" · ")} title={post.title} lead={post.intro}>
+      <PageHeader crumbs={crumbs} eyebrow={post.tags.slice(0, 3).join(" · ") || "Blog"} title={post.title} lead={post.description}>
         <p className={styles.meta}>
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           <span>{post.readingMinutes} min read</span>
@@ -40,52 +71,27 @@ export function BlogPostPage({ post }: { post: BlogPost }) {
 
       <section className={styles.sectionTight} aria-label="Article">
         <div className={`container ${styles.articleLayout}`}>
-          <article className={styles.prose}>
-            {post.sections.map((section) => (
-              <section key={section.heading} aria-labelledby={anchor(section.heading)}>
-                <h2 id={anchor(section.heading)}>{section.heading}</h2>
-                {section.paragraphs?.map((paragraph) => (
-                  <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-                ))}
-                {section.list ? (
-                  <ul>
-                    {section.list.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                ) : null}
-                {section.after?.map((paragraph) => (
-                  <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-                ))}
-              </section>
-            ))}
-            {post.sources && post.sources.length > 0 ? (
-              <aside className={styles.sources} aria-label="Sources">
-                <h2>Sources</h2>
-                <ul>
-                  {post.sources.map((source) => (
-                    <li key={source.href}>
-                      <a href={source.href} target="_blank" rel="noopener noreferrer">
-                        {source.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </aside>
+          <div>
+            {post.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={post.image} alt="" className={styles.featureImage} />
             ) : null}
-          </article>
+            <article className={styles.prose} dangerouslySetInnerHTML={{ __html: html }} />
+          </div>
 
           <aside className={styles.aside}>
-            <nav className={styles.toc} aria-label="On this page">
-              <h2>On this page</h2>
-              <ol>
-                {post.sections.map((section) => (
-                  <li key={section.heading}>
-                    <a href={`#${anchor(section.heading)}`}>{section.heading}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            {headings.length > 1 ? (
+              <nav className={styles.toc} aria-label="On this page">
+                <h2>On this page</h2>
+                <ol>
+                  {headings.map((heading) => (
+                    <li key={heading.id}>
+                      <a href={`#${heading.id}`}>{heading.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            ) : null}
             {related.length > 0 ? (
               <div className={styles.panel}>
                 <p className={styles.kicker}>Related services</p>

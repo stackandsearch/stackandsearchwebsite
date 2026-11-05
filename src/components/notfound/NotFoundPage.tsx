@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { PageMain } from "@/components/page/PageMain";
-import { posts } from "@/content/blog";
 import { primaryNav } from "@/content/navigation";
 import { linkForLabel, resolvedServices } from "@/content/services";
+import { getWpPosts } from "@/lib/wordpress";
 import { NotFoundScene } from "./NotFoundScene";
 import { NotFoundSearch, type SearchItem } from "./NotFoundSearch";
 import styles from "./NotFound.module.scss";
@@ -18,7 +18,8 @@ const PAGE_HINTS: Record<string, string> = {
 const POPULAR = ["/services/", "/website-development/", "/seo-services/", "/pricing/", "/case-studies/", "/contact/"];
 
 // Every page a lost visitor might want, for the search box.
-function searchIndex(): SearchItem[] {
+async function searchIndex(): Promise<SearchItem[]> {
+  const posts = await getWpPosts();
   const items: SearchItem[] = [
     { label: "Home", href: "/", group: "Page" },
     { label: "All services", href: "/services/", group: "Page", hint: "Everything we build, run and grow" },
@@ -42,8 +43,8 @@ function searchIndex(): SearchItem[] {
   });
 }
 
-export function NotFoundPage() {
-  const index = searchIndex();
+export async function NotFoundPage() {
+  const index = await searchIndex();
   const popular = POPULAR.flatMap((href) => index.filter((item) => item.href === href));
 
   return (
