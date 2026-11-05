@@ -129,3 +129,9 @@ main:focus {
 body:has([data-lead-form="contact"]) #get-started {
   display: none;
 }
+
+// Netlify's free-plan "Powered by Netlify" badge is an injected iframe.
+// The supported way to remove it is the badge setting on a paid plan.
+iframe#nl-badge-frame {
+  display: none !important;
+}
