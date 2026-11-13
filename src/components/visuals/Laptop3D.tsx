@@ -1,11 +1,11 @@
 import styles from "./Laptop3D.module.scss";
+import { LogoMark } from "@/components/brand/Logo";
 
 interface Laptop3DProps {
   className?: string;
   variant?: "hero" | "story";
 }
 
-const S_PATH = "M34 17H25a7.5 7.5 0 0 0 0 15h14a7.5 7.5 0 0 1 0 15H21";
 
 // Realistic CSS 3D laptop (decorative, hidden from assistive technology).
 // Proportions follow a modern 14-inch notebook: 3:2 lid; deck as wide as the
@@ -33,11 +33,7 @@ export function Laptop3D({ className, variant = "hero" }: Laptop3DProps) {
 
       <div className={styles.lid}>
         <div className={styles.lidBack}>
-          <svg className={styles.logo} viewBox="0 0 64 64" focusable="false">
-            <rect width="64" height="64" rx="15" fill="#3B3FE8" />
-            <path d={S_PATH} fill="none" stroke="#fff" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx="46.5" cy="17" r="4.5" fill="#2BE3A8" />
-          </svg>
+          <LogoMark className={styles.logo} />
         </div>
 
         <div className={styles.lidFront}>

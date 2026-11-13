@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoMark } from "@/components/brand/Logo";
 import { Reveal } from "@/components/motion/Reveal";
 import { footerGroups } from "@/content/footer";
 import { legalNav } from "@/content/navigation";
@@ -10,9 +11,9 @@ import { LeadCta } from "@/components/lead/LeadCta";
 
 // The giant logo is split into letters so each can react to the mouse.
 const GIANT_PARTS = [
-  { text: "stack", tone: "stack" },
+  { text: "Stack", tone: "stack" },
   { text: "and", tone: "and" },
-  { text: "search", tone: "search" },
+  { text: "Search", tone: "search" },
 ] as const;
 
 // Site footer, always dark (.surface-dark) in both themes. Also the
@@ -55,11 +56,7 @@ export function Footer() {
 
         <Reveal variant="fade" className={styles.giant}>
           <span className={styles.giantInner} aria-hidden="true">
-            <svg className={styles.giantMark} viewBox="0 0 64 64" focusable="false">
-              <rect className={styles.giantTile} width="64" height="64" rx="15" />
-              <path className={styles.giantS} d="M34 17H25a7.5 7.5 0 0 0 0 15h14a7.5 7.5 0 0 1 0 15H21" />
-              <circle className={styles.giantDot} cx="46.5" cy="17" r="4.5" />
-            </svg>
+            <LogoMark className={styles.giantMark} />
             <span className={styles.giantWord}>
               {GIANT_PARTS.flatMap((part) =>
                 part.text.split("").map((letter, index) => (

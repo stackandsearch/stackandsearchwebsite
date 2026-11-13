@@ -1,7 +1,9 @@
-// Colour system derived from the Stack & Search logo:
-// indigo #3B3FE8 (tile), mint #2BE3A8 (dot), navy #10143A (wordmark text).
-// Indigo carries primary actions in both themes (white text, 6.9:1). Mint
-// carries links, icons and highlights on dark surfaces; indigo does in light.
+// Colour system derived from the StackandSearch logo:
+// navy #0B1224 (dark background), mint #2BE3A8 (star), cerulean #008DB5
+// (middle layer and "and"), warm white #FAF7F0 and deep teal ink #163541.
+// Cerulean carries primary actions in both themes, one step darker (#007DA1)
+// so white text on it reaches 4.7:1. Mint carries links, icons and highlights
+// on dark surfaces; a deeper cerulean does in light.
 // Text colours meet WCAG AA on their backgrounds (calculated; re-verify).
 @use "sass:color";
 @use "sass:list";
@@ -11,19 +13,22 @@
 
 $brand: (
   dark: (
-    canvas: #070a1f, surface: #0f1430, raised: #161c40, sunken: #0a0d26,
-    text: #f5f7ff, muted: #a6acd0, border: rgb(255 255 255 / 0.08), border-strong: #6870a0,
-    accent: #3b3fe8, accent-ink: #2be3a8, on-accent: #ffffff,
-    secondary: #8b8eff, highlight: #2be3a8, highlight-ink: #2be3a8, brand-ink: #8b8eff, scheme: dark,
+    canvas: #0b1224, surface: #111a30, raised: #18233f, sunken: #080e1c,
+    text: #faf7f0, muted: #a9b4c6, border: rgb(250 247 240 / 0.09), border-strong: #64728c,
+    accent: #007da1, accent-ink: #2be3a8, on-accent: #ffffff,
+    secondary: #4cc4e6, highlight: #2be3a8, highlight-ink: #2be3a8, brand-ink: #4cc4e6, scheme: dark,
+    logo-ink: #faf7f0,
   ),
   light: (
-    canvas: #f6f7ff, surface: #ffffff, raised: #ffffff, sunken: #eceefd,
-    text: #10143a, muted: #4d5379, border: rgb(16 20 58 / 0.1), border-strong: #7f84a8,
-    accent: #3b3fe8, accent-ink: #3b3fe8, on-accent: #ffffff,
-    secondary: #4a32d4, highlight: #2be3a8, highlight-ink: #0a7d5c, brand-ink: #3b3fe8, scheme: light,
+    canvas: #faf7f0, surface: #ffffff, raised: #ffffff, sunken: #f1ecdf,
+    text: #163541, muted: #4a626c, border: rgb(22 53 65 / 0.12), border-strong: #7c9098,
+    accent: #007da1, accent-ink: #007396, on-accent: #ffffff,
+    secondary: #0a6b8a, highlight: #2be3a8, highlight-ink: #0a7d5c, brand-ink: #007da1, scheme: light,
+    logo-ink: #163541,
   ),
-  stage: (bg: #070a1f, accent: #2be3a8, secondary: #5b5fff, mid: #3f8fe0, secondary-light: #b3b5ff),
-  gradient: (#3b3fe8, #3f8fe0, #2be3a8),
+  stage: (bg: #0b1224, accent: #2be3a8, secondary: #1ea7d0, mid: #14b8b8, secondary-light: #a4def0),
+  gradient: (#008db5, #14b8b8, #2be3a8),
+  logo: (blue: #008db5, star: #2be3a8),
 );
 
 @function rgb-channels($c) {
@@ -49,6 +54,7 @@ $brand: (
   --color-highlight-ink: #{map.get($t, highlight-ink)};
   --color-brand-ink: #{map.get($t, brand-ink)};
   --color-focus: #{map.get($t, accent-ink)};
+  --color-logo-ink: #{map.get($t, logo-ink)};
   --color-header: rgb(#{rgb-channels(map.get($t, canvas))} / 0.9);
   --canvas-rgb: #{rgb-channels(map.get($t, canvas))};
   --accent-rgb: #{rgb-channels(map.get($t, accent))};
@@ -69,6 +75,8 @@ $brand: (
   --stage-secondary: #{map.get($s, secondary)};
   --stage-mid: #{map.get($s, mid)};
   --stage-secondary-light: #{map.get($s, secondary-light)};
+  --color-logo-blue: #{map.get(map.get($p, logo), blue)};
+  --color-logo-star: #{map.get(map.get($p, logo), star)};
   --stage-accent-rgb: #{rgb-channels(map.get($s, accent))};
   --stage-secondary-rgb: #{rgb-channels(map.get($s, secondary))};
   --gradient-brand: linear-gradient(115deg, #{list.nth($g, 1)} 0%, #{list.nth($g, 2)} 50%, #{list.nth($g, 3)} 100%);
@@ -82,21 +90,21 @@ $brand: (
 }
 
 @mixin light-shadows {
-  --shadow-1: 0 1px 2px rgb(16 20 58 / 0.06), 0 1px 1px rgb(16 20 58 / 0.04);
-  --shadow-2: 0 2px 4px rgb(16 20 58 / 0.05), 0 12px 32px -12px rgb(16 20 58 / 0.18);
-  --shadow-3: 0 24px 64px -16px rgb(16 20 58 / 0.28), 0 0 0 1px rgb(16 20 58 / 0.06);
+  --shadow-1: 0 1px 2px rgb(22 53 65 / 0.07), 0 1px 1px rgb(22 53 65 / 0.04);
+  --shadow-2: 0 2px 4px rgb(22 53 65 / 0.05), 0 12px 32px -12px rgb(22 53 65 / 0.2);
+  --shadow-3: 0 24px 64px -16px rgb(22 53 65 / 0.28), 0 0 0 1px rgb(22 53 65 / 0.06);
 }
 
 :root {
-  // Type families (next/font provides --font-display, --font-text, --font-logo)
-  --font-family-display: var(--font-display), "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  // Type families (next/font provides --font-display and --font-text).
+  // Headings use the logo's typeface, Plus Jakarta Sans.
+  --font-family-display: var(--font-display), "Plus Jakarta Sans", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-family-text: var(--font-text), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-family-logo: var(--font-logo), "Plus Jakarta Sans", Arial, sans-serif;
   --font-family-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   // Fluid type scale (360px -> 1440px viewport)
-  --step-display: #{fn.fluid(44px, 92px)};
-  --step-h1: #{fn.fluid(36px, 64px)};
+  --step-display: #{fn.fluid(38px, 68px)};
+  --step-h1: #{fn.fluid(34px, 60px)};
   --step-h2: #{fn.fluid(28px, 44px)};
   --step-h3: #{fn.fluid(21px, 28px)};
   --step-lead: #{fn.fluid(18px, 21px)};

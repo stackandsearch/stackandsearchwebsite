@@ -174,7 +174,7 @@
 // Sized to the footer width (cqi units); fades into the footer at the bottom.
 // Adjust --giant-size if it is too wide or narrow on your screen.
 .giant {
-  --giant-size: 11cqi;
+  --giant-size: 10.5cqi;
 
   margin-block: var(--space-l) calc(var(--space-l) * -1);
   mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
@@ -187,11 +187,11 @@
   justify-content: center;
   gap: 0.14em;
   padding-top: 0.2em;
-  font-family: var(--font-family-logo);
+  font-family: var(--font-family-display);
   font-size: var(--giant-size);
-  font-weight: 700;
+  font-weight: 500;
   line-height: 0.9;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.035em;
   white-space: nowrap;
 
   @include scroll-driven {
@@ -210,30 +210,14 @@
 
 .giantMark {
   flex: none;
-  width: 0.86em;
-  height: 0.86em;
-  border-radius: 0.2em;
-  box-shadow: 0 0 60px rgb(var(--accent-rgb) / 0.55);
+  width: auto;
+  height: 0.95em;
+  overflow: visible;
+  filter: drop-shadow(0 0 40px rgb(var(--accent-ink-rgb) / 0.35));
 
   @include motion-ok {
     transition: transform 500ms var(--ease-spring);
   }
-}
-
-.giantTile {
-  fill: #3b3fe8;
-}
-
-.giantS {
-  fill: none;
-  stroke: #ffffff;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 8;
-}
-
-.giantDot {
-  fill: #2be3a8;
 }
 
 .giantWord {
@@ -256,11 +240,11 @@
 }
 
 .and {
-  color: #8a8fb0;
+  color: var(--color-logo-blue);
 }
 
 .search {
-  color: var(--color-brand-ink);
+  color: var(--color-text);
 }
 
 // Hover: the letter under the mouse springs up and lights mint; its

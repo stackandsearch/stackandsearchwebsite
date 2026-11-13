@@ -1,0 +1,20 @@
+// Brand colours of the logo. Only the lettering and the white layers follow
+// the theme (--color-logo-ink, re-set on always-dark surfaces); cerulean and
+// mint never change. A logo can force its lettering with --logo-ink.
+
+.sprite {
+  position: absolute;
+  overflow: hidden;
+}
+
+.ink {
+  fill: var(--logo-ink, var(--color-logo-ink));
+}
+
+.blue {
+  fill: var(--color-logo-blue);
+}
+
+.star {
+  fill: var(--color-logo-star);
+}

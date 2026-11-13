@@ -23,7 +23,14 @@ export function breadcrumbSchema(items: { label: string; href?: string }[], curr
   };
 }
 
-export function serviceSchema(input: { name: string; description: string; path: string }): SchemaNode {
+interface OfferRange {
+  lowPrice: number;
+  highPrice: number;
+  currency: string;
+  count: number;
+}
+
+export function serviceSchema(input: { name: string; description: string; path: string; offers?: OfferRange }): SchemaNode {
   const url = absoluteUrl(input.path);
   return {
     "@type": "Service",
@@ -33,6 +40,18 @@ export function serviceSchema(input: { name: string; description: string; path: 
     description: input.description,
     url,
     provider: organizationRef(),
+    ...(input.offers
+      ? {
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: input.offers.currency,
+            lowPrice: input.offers.lowPrice,
+            highPrice: input.offers.highPrice,
+            offerCount: input.offers.count,
+            url,
+          },
+        }
+      : {}),
   };
 }
 
@@ -63,6 +82,7 @@ export function itemListSchema(items: { name: string; path: string }[]): SchemaN
 export function organizationSchema(extra: { email?: string; sameAs?: string[] } = {}): SchemaNode {
   return {
     ...organizationRef(),
+    logo: absoluteUrl("/images/brand/icon-512.png"),
     ...(extra.email ? { email: extra.email } : {}),
     ...(extra.sameAs && extra.sameAs.length > 0 ? { sameAs: extra.sameAs } : {}),
   };

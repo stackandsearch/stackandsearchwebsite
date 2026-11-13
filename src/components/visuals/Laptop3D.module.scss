@@ -194,10 +194,11 @@
 
 // Rotated so it reads upright when the closed laptop is seen from the front.
 .logo {
-  width: 15%;
-  aspect-ratio: 1;
-  border-radius: 22%;
-  box-shadow: 0 0 2cqw rgb(59 63 232 / 0.6);
+  --logo-ink: #faf7f0;
+
+  width: 17%;
+  height: auto;
+  filter: drop-shadow(0 0 1.5cqw rgb(var(--stage-accent-rgb) / 0.45));
   transform: rotate(180deg);
 }
 
@@ -283,7 +284,7 @@
   aspect-ratio: 1;
   margin-right: auto;
   border-radius: 30%;
-  background: #3b3fe8;
+  background: var(--color-accent);
 }
 
 .uiPill {
@@ -340,14 +341,14 @@
   top: 24%;
   width: 45%;
   height: 6%;
-  background: #f5f7ff;
+  background: #faf7f0;
 }
 
 .lineL {
   top: 33%;
   width: 33%;
   height: 6%;
-  background: #f5f7ff;
+  background: #faf7f0;
 }
 
 .lineS1,
@@ -379,8 +380,8 @@
   width: 15%;
   height: 7%;
   border-radius: 999px;
-  background: #3b3fe8;
-  box-shadow: 0 0 2cqw rgb(59 63 232 / 0.6);
+  background: var(--color-accent);
+  box-shadow: 0 0 2cqw rgb(var(--stage-secondary-rgb) / 0.6);
 }
 
 .tag {
