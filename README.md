@@ -39,7 +39,12 @@ npm run dev                  # http://localhost:3000
 ## Where things live
 
 - `src/content/`: all page text (services, about, pricing, blog, legal)
+- `src/content/services/prices.ts`: every price on the site, in one file
+- `src/components/brand/`: the logo as inline vector paths
+- `src/styles/_themes.scss`: the colour palette (`$brand`) for both themes
 - `src/components/`: page templates, hero scenes, lead forms
 - `src/styles/`: design tokens, motion and effect mixins
 - `docs/PAGE-INVENTORY.md`: every page and its status
 - `docs/OWNER-INPUTS.md`: details still needed before launch
+- `docs/PRICING-RESEARCH.md`: where the proposed prices come from
+- `docs/IMPROVEMENTS.md`: site review, with what to improve next

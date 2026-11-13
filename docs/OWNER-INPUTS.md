@@ -26,7 +26,7 @@ Facts the site needs from the business. Nothing here may be invented.
 - [ ] Team names, bios, photos, credentials
 - [ ] Real case studies and testimonials, with permission
 - [ ] Certifications actually held
-- [ ] Prices, or "quote only"
+- [ ] Prices: proposed starting prices are now in `src/content/services/prices.ts` (see `docs/PRICING-RESEARCH.md`). Confirm or change each figure before launch.
 - [ ] Email, phone, WhatsApp, address, hours; legal entity name
 - [ ] Privacy, terms and cookie text reviewed by a qualified professional
 - [ ] Form delivery destination; consent jurisdictions
@@ -78,7 +78,7 @@ Each service page states typical timelines and ways of working. Confirm or edit 
 
 ## Blog (WordPress.com)
 
-- Posts are written on the WordPress.com site in `src/content/blog/source.ts` and appear on stackandsearch.com/blog/ within about 15 minutes. No deploy needed.
+- Posts are written on the WordPress.com site in `src/content/blog/source.ts` and appear on stackandsearch.com/blog/ within about 5 minutes. A new post's own address opens straight away. No deploy needed.
 - The post's slug becomes its address: /blog/<slug>/. Don't change slugs after publishing.
 - The excerpt is the meta description (aim for 120 to 155 characters).
 - Tags show as labels; tags matching a service ("SEO", "AEO", "GEO", "Paid ads"...) add related-service links.
