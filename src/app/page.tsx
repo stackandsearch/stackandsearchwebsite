@@ -5,13 +5,18 @@ import { Hero } from "@/components/sections/home/Hero";
 import { Packages } from "@/components/sections/home/Packages";
 import { Process } from "@/components/sections/home/Process";
 import { ServicesOverview } from "@/components/sections/home/ServicesOverview";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { BrandField } from "@/components/visuals/BrandField";
 import { OrbitField } from "@/components/visuals/OrbitField";
 import { ScrollMarquee } from "@/components/visuals/ScrollMarquee";
+import { company, socialUrls } from "@/content/company";
+import { site } from "@/content/site";
+import { graph, organizationSchema } from "@/lib/seo/structured-data";
+import { SITE_ORIGIN } from "@/lib/seo/urls";
 import styles from "./page.module.scss";
 
-// Homepage under construction (Phase 3). Part 8 adds the final sections;
-// the site is noindex until launch. Each .scene wrapper lets decorative
-// vector art sit behind a section's content.
+// Homepage. BrandField is the animated background behind every section; each
+// .scene wrapper lets decorative vector art sit behind a section's content.
 export const metadata: Metadata = {
   title: { absolute: "Stack & Search: web design and development agency" },
   alternates: { canonical: "/" },
@@ -19,7 +24,14 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <>
+    <div className={styles.home}>
+      <JsonLd
+        data={graph([
+          organizationSchema({ email: company.email, sameAs: socialUrls() }),
+          { "@type": "WebSite", "@id": `${SITE_ORIGIN}/#website`, url: `${SITE_ORIGIN}/`, name: site.name, alternateName: site.alternateName },
+        ])}
+      />
+      <BrandField anchorId="hero-title" />
       <Hero />
       <ScrollMarquee />
       <div className={styles.scene}>
@@ -36,15 +48,6 @@ export default function HomePage() {
         <OrbitField className={styles.orbitPackages} />
         <Packages />
       </div>
-      <section className={styles.upcoming} aria-labelledby="upcoming-title">
-        <div className="container">
-          <h2 id="upcoming-title">More of the homepage is on its way</h2>
-          <p>
-            Build progress note: service illustrations, honest SEO, AEO and GEO expectations, the FAQ and the
-            closing call to action are added in the next setup parts.
-          </p>
-        </div>
-      </section>
-    </>
+    </div>
   );
 }

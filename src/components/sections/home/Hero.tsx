@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { Magnetic } from "@/components/motion/Magnetic";
+import { MotionToggle } from "@/components/motion/MotionToggle";
 import { ButtonLink } from "@/components/ui/Button";
 import buttonStyles from "@/components/ui/Button.module.scss";
 import { AeoIcon, BracesIcon, CheckCircleIcon, GaugeIcon, SeoIcon } from "@/components/ui/duotone-icons";
@@ -18,13 +19,6 @@ const proofPoints = [
 // The query the search bar types: what a prospective client would search.
 const QUERY = "web design and development agency";
 
-// Starfield: [left %, top %, size 1-3]
-const STARS: Array<[number, number, number]> = [
-  [6, 16, 1], [12, 58, 2], [19, 30, 1], [27, 10, 3], [34, 70, 2], [41, 20, 1],
-  [49, 6, 2], [57, 52, 1], [63, 14, 3], [70, 36, 2], [77, 8, 1], [84, 48, 2],
-  [91, 22, 1], [46, 40, 3], [24, 46, 2], [80, 64, 1], [96, 60, 2], [3, 78, 1],
-];
-
 // "The search horizon": a query types itself, the headline answers it, and the
 // build appears over a receding grid. Decorative layers are aria-hidden.
 export function Hero() {
@@ -34,16 +28,6 @@ export function Hero() {
         <div className={`${styles.blob} ${styles.blobA}`} />
         <div className={`${styles.blob} ${styles.blobB}`} />
         <div className={`${styles.blob} ${styles.blobC}`} />
-        <div className={styles.stars}>
-          {STARS.map(([x, y, size], index) => (
-            <span
-              key={index}
-              className={styles.star}
-              data-size={size}
-              style={{ left: `${x}%`, top: `${y}%`, "--d": `${(index % 6) * 0.3}s` } as CSSProperties}
-            />
-          ))}
-        </div>
         <div className={styles.floor}>
           <div className={styles.floorGrid} />
         </div>
@@ -51,6 +35,8 @@ export function Hero() {
         <div className={styles.spotlight} />
         <div className={styles.grain} />
       </div>
+
+      <MotionToggle className={styles.motionToggle} />
 
       <div className={`container ${styles.inner}`}>
         <div className={styles.copy}>

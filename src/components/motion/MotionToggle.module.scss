@@ -1,0 +1,43 @@
+@use "../../styles/mixins" as *;
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.8rem 0.3rem 0.65rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: rgb(var(--canvas-rgb) / 0.6);
+  color: var(--color-text-muted);
+  font-size: var(--step-label);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    color var(--dur-quick) var(--ease-out),
+    border-color var(--dur-quick) var(--ease-out);
+
+  svg {
+    width: 0.8rem;
+    height: 0.8rem;
+    fill: currentColor;
+  }
+
+  &:disabled {
+    opacity: 0;
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--color-accent-ink);
+    border-color: var(--color-accent-ink);
+  }
+
+  @include hover-capable {
+    &:hover {
+      color: var(--color-text);
+      border-color: var(--color-text);
+    }
+  }
+}

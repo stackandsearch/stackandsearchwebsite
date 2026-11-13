@@ -1,9 +1,11 @@
 @use "../../../styles/mixins" as *;
 
 // Hero: "the search horizon".
-// Timing rule: every timed animation here finishes within ~5 seconds. After
-// that, the scene moves only with the pointer (--px/--py/--mx/--my from
-// HeroScene) and with scrolling, so no pause control is needed (WCAG 2.2.2).
+// Timing rule: every CSS animation here finishes within ~5 seconds; after
+// that the scene moves with the pointer (--px/--py/--mx/--my from HeroScene)
+// and with scrolling. The one thing that keeps moving is the canvas
+// background (BrandField), which is why the hero carries a pause control
+// (.motionToggle, WCAG 2.2.2).
 
 .hero {
   position: relative;
@@ -70,55 +72,6 @@
   from {
     opacity: 0;
     scale: 0.55;
-  }
-}
-
-// Starfield: twinkles twice, then rests.
-.stars {
-  position: absolute;
-  inset: 0;
-  translate: calc(var(--px, 0) * -12px) calc(var(--py, 0) * -12px);
-
-  :root[data-theme="light"] & {
-    opacity: 0.45;
-  }
-}
-
-.star {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  background: var(--color-text);
-  opacity: 0.55;
-
-  &[data-size="2"] {
-    width: 3px;
-    height: 3px;
-  }
-
-  &[data-size="3"] {
-    width: 4px;
-    height: 4px;
-    background: var(--color-accent);
-    box-shadow: 0 0 10px rgb(var(--accent-rgb) / 0.85);
-  }
-
-  @include motion-ok {
-    animation: twinkle 1.4s ease-in-out var(--d, 0s) 2 both;
-  }
-}
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.55;
-    scale: 1;
-  }
-
-  50% {
-    opacity: 1;
-    scale: 1.9;
   }
 }
 
@@ -204,11 +157,22 @@
   }
 }
 
+// Pause / play for the animated background: bottom right of the hero.
+.motionToggle {
+  position: absolute;
+  right: var(--page-margin);
+  bottom: var(--space-m);
+  z-index: 2;
+}
+
 // =============================================================================
 // Copy
 // =============================================================================
 .inner {
   display: grid;
+  // minmax(0, …): the column may be narrower than its widest unbreakable
+  // child (the search bar), so text never runs off small phones.
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: var(--space-2xl);
 
@@ -254,7 +218,9 @@
 
 .query {
   width: calc(var(--chars) * 1ch);
+  min-width: 0;
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 
   @include motion-ok {
@@ -318,7 +284,7 @@
 
 // Headline: movement only, never opacity, so it counts for LCP immediately.
 .title {
-  max-width: 14ch;
+  max-width: 17ch;
   margin-bottom: var(--space-s);
 
   @include motion-ok {
