@@ -5,9 +5,11 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { ServiceIcon } from "@/components/ui/duotone-icons";
 import { allServicesLink } from "@/content/navigation";
 import { groupForHref, linkForLabel, type ResolvedService, type ServiceLink } from "@/content/services";
+import { CURRENCY, priceFor, priceLabel } from "@/content/services/prices";
 import type { ServiceFaqItem } from "@/content/services/types";
 import { breadcrumbSchema, faqSchema, graph, serviceSchema } from "@/lib/seo/structured-data";
 import { PageIcon } from "./PageIcon";
+import { PricePlans } from "./PricePlans";
 import { ServiceGraphic } from "./ServiceGraphic";
 import { ServiceHero } from "./ServiceHero";
 import styles from "./ServicePage.module.scss";
@@ -95,13 +97,22 @@ export function ServicePage({ service }: { service: ResolvedService }) {
   const related = content.related.map((label) => linkForLabel(label)).filter((link): link is ServiceLink => Boolean(link));
   const [statement, ...support] = content.overview.paragraphs;
   const steps = content.process.steps;
+  const price = priceFor(content.label);
+  const fromLabel = price ? `From ${priceLabel(price.from, price.unit)}` : undefined;
 
   return (
     <PageMain>
       <JsonLd
         data={graph([
           breadcrumbSchema(crumbs, href),
-          serviceSchema({ name: content.label, description: content.seo.description, path: href }),
+          serviceSchema({
+            name: content.label,
+            description: content.seo.description,
+            path: href,
+            offers: price
+              ? { lowPrice: price.from, highPrice: Math.max(...price.plans.map((plan) => plan.price)), currency: CURRENCY, count: price.plans.length }
+              : undefined,
+          }),
           faqSchema(content.faqs),
         ])}
       />
@@ -124,7 +135,14 @@ export function ServicePage({ service }: { service: ResolvedService }) {
             {content.facts.map((fact) => (
               <div key={fact.label} className={styles.fact} data-fx-spot="">
                 <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
+                {fact.label === "Pricing" && fromLabel ? (
+                  <dd>
+                    {fromLabel}
+                    <small className={styles.factNote}>{fact.value}</small>
+                  </dd>
+                ) : (
+                  <dd>{fact.value}</dd>
+                )}
               </div>
             ))}
           </dl>
@@ -275,11 +293,22 @@ export function ServicePage({ service }: { service: ResolvedService }) {
         </div>
       </section>
 
-      <section className={styles.section} aria-labelledby="pricing-title">
+      <section id="pricing" className={styles.section} aria-labelledby="pricing-title">
         <div className="container">
+          {price ? (
+            <div className={styles.planBlock}>
+              <SectionHead
+                id="plans-title"
+                kicker="Plans and prices"
+                title={`${content.label} pricing`}
+                intro={`${fromLabel}. Pick the closest starting point; your written quote fixes the exact price for your scope.`}
+              />
+              <PricePlans price={price} />
+            </div>
+          ) : null}
           <div className={styles.priceCard} data-fx-reveal="" data-fx-spot="">
             <div className={styles.priceCopy}>
-              <p className={styles.kicker}>Pricing</p>
+              <p className={styles.kicker}>How pricing works</p>
               <h2 id="pricing-title">{content.pricing.heading}</h2>
               {content.pricing.paragraphs.map((paragraph) => (
                 <p key={paragraph.slice(0, 40)}>{paragraph}</p>

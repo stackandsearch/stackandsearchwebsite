@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { serviceByLabel } from "@/content/services";
+import { priceFor } from "@/content/services/prices";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 import { ServicePage } from "./ServicePage";
 
 // Each service has its own small, fully static route file
 // (src/app/<slug>/page.tsx) calling these helpers, so any unknown URL is a
-// real 404. A label without content or a navigation link fails the build.
+// real 404. A label without content, a navigation link or a price fails the
+// build.
 function resolve(label: string) {
   const service = serviceByLabel(label);
   if (!service) throw new Error(`No service content or navigation link for "${label}"`);
+  if (!priceFor(label)) throw new Error(`No price for "${label}" in src/content/services/prices.ts`);
   return service;
 }
 

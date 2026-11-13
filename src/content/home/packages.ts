@@ -1,7 +1,7 @@
 import type { NavLinkItem } from "@/content/navigation";
 
-// Packages from the SEO plan. Prices are intentionally absent until the owner
-// sets them (docs/OWNER-INPUTS.md); each card asks for a quote instead.
+// Website packages. Their starting prices live with the other prices in
+// src/content/services/prices.ts ("Website development" plans, same names).
 
 export interface WebsitePackage {
   name: string;
@@ -41,7 +41,7 @@ export const websitePackages: WebsitePackage[] = [
   },
 ];
 
-export const maintenanceNote = "Every package can add an optional monthly maintenance plan.";
+export const maintenanceNote = "Every package can add a monthly maintenance plan, from ₹4,000/month.";
 
 // Keep the status in sync with navigation.ts until the route registry (Phase 4).
 export const pricingLink: NavLinkItem = {

@@ -791,6 +791,21 @@
 
 // --- Pricing: rotating gradient border ------------------------------------------
 
+.factNote {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-family-text);
+  font-size: var(--step-small);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+// Plans and prices sit above the "how pricing works" card.
+.planBlock {
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
 .priceCard {
   position: relative;
   isolation: isolate;

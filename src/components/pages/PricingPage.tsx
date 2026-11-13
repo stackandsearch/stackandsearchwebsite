@@ -5,13 +5,28 @@ import { ServiceGraphic } from "@/components/service/ServiceGraphic";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { ServiceFaq } from "@/components/service/ServicePage";
 import { pricing } from "@/content/pricing";
-import { linkForLabel } from "@/content/services";
+import { serviceGroups } from "@/content/navigation";
+import { groupForHref, linkForLabel, resolvedServices } from "@/content/services";
+import { PRICE_FOOTNOTE, priceFor, priceLabel, unitWords } from "@/content/services/prices";
 import { breadcrumbSchema, faqSchema, graph, webPageSchema } from "@/lib/seo/structured-data";
 import { Packages } from "@/components/sections/home/Packages";
 import { CheckIcon, CtaBand, order, pad, SectionHead } from "./parts";
 import styles from "./Pages.module.scss";
 
 const PATH = "/pricing/";
+
+// Every priced service, grouped Build / Run / Grow like the main menu.
+const priceGroups = serviceGroups.map((group) => ({
+  id: group.id,
+  label: group.label,
+  intro: group.intro,
+  rows: resolvedServices().flatMap((service) => {
+    const price = priceFor(service.content.label);
+    return price && groupForHref(service.href)?.id === group.id
+      ? [{ label: service.content.label, href: service.href, price }]
+      : [];
+  }),
+}));
 
 export function PricingPage() {
   const crumbs = [{ label: "Home", href: "/" }, { label: "Pricing" }];
@@ -34,8 +49,8 @@ export function PricingPage() {
         points={pricing.hero.points}
         crumbs={crumbs}
         graphic={<ServiceGraphic kind="services" />}
-        secondaryHref="#models"
-        secondaryLabel="How we price"
+        secondaryHref="#price-list"
+        secondaryLabel="See the price list"
       />
 
       <section id="models" className={styles.section} aria-labelledby="models-title">
@@ -64,6 +79,39 @@ export function PricingPage() {
       </section>
 
       <Packages />
+
+      <section id="price-list" className={styles.section} aria-labelledby="price-list-title">
+        <div className="container">
+          <SectionHead
+            id="price-list-title"
+            kicker="Price list"
+            title="Starting prices for every service"
+            intro="Open a service to see its three plans and what each includes."
+          />
+          <div className={styles.priceGroups}>
+            {priceGroups.map((group, index) => (
+              <div key={group.id} className={styles.priceGroup} data-fx-reveal="" style={order(index)}>
+                <h3>{group.label}</h3>
+                <p>{group.intro}</p>
+                <ul className={styles.priceRows}>
+                  {group.rows.map((row) => (
+                    <li key={row.href}>
+                      <Link href={row.href + "#pricing"} className={styles.priceRow}>
+                        <span className={styles.priceName}>{row.label}</span>
+                        <span className={styles.priceValue}>
+                          <small>From</small> {priceLabel(row.price.from, row.price.unit)}
+                        </span>
+                        <span className={styles.priceUnit}>{unitWords(row.price.unit)}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p className={styles.priceFootnote}>{PRICE_FOOTNOTE}</p>
+        </div>
+      </section>
 
       <section className={styles.section} aria-labelledby="quote-title">
         <div className="container">

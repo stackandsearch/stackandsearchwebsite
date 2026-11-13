@@ -529,7 +529,7 @@
   overflow: hidden;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-l);
-  background: #0f0d24;
+  background: #0b1224;
   box-shadow: 0 2rem 4rem -2rem rgb(0 0 0 / 0.6);
   container-type: inline-size;
   transform: perspective(70rem) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
@@ -1577,4 +1577,91 @@
   border-color: transparent;
   background: var(--color-accent);
   color: #fff;
+}
+
+// --- Pricing page: price list -------------------------------------------------------
+.priceGroups {
+  display: grid;
+  gap: var(--space-m);
+
+  @include up(lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.priceGroup {
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+
+  @include fx.reveal;
+
+  h3 {
+    margin-bottom: var(--space-3xs);
+  }
+
+  > p {
+    margin-bottom: var(--space-s);
+    color: var(--color-text-muted);
+    font-size: var(--step-small);
+  }
+}
+
+.priceRows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.priceRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 var(--space-s);
+  align-items: baseline;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
+  text-decoration: none;
+
+  @include hover-capable {
+    &:hover .priceName {
+      color: var(--color-accent-ink);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+}
+
+.priceName {
+  font-weight: 600;
+}
+
+.priceValue {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  white-space: nowrap;
+
+  small {
+    color: var(--color-text-muted);
+    font-family: var(--font-family-text);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+.priceUnit {
+  grid-column: 1 / -1;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.priceFootnote {
+  margin-top: var(--space-m);
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
 }

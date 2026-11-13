@@ -1,0 +1,160 @@
+@use "../../styles/mixins" as *;
+@use "../../styles/fx" as fx;
+
+@include fx.base;
+
+// Price cards: three plans side by side from tablet width up.
+
+.wrap {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.plans {
+  display: grid;
+  gap: var(--space-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up(md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+.plan {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: clamp(1.25rem, 2.5vw, 1.9rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+
+  @include fx.spotlight;
+  @include fx.reveal;
+}
+
+// Gradient border in the brand colours for the suggested plan.
+.featured {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    var(--gradient-brand) border-box;
+  box-shadow: var(--shadow-2);
+}
+
+.badge {
+  position: absolute;
+  top: clamp(1.25rem, 2.5vw, 1.9rem);
+  right: clamp(1.25rem, 2.5vw, 1.9rem);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgb(var(--accent-ink-rgb) / 0.14);
+  color: var(--color-accent-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.name {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+}
+
+.bestFor {
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.price {
+  display: grid;
+  gap: 0.1rem;
+  margin-block: var(--space-2xs);
+  padding-block: var(--space-s);
+  border-block: 1px solid var(--color-border);
+
+  strong {
+    font-family: var(--font-family-display);
+    font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+}
+
+.from {
+  color: var(--color-text-muted);
+  font-size: var(--step-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.unit {
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+}
+
+.includes {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: var(--step-small);
+    font-weight: 500;
+  }
+}
+
+.tick {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.15em;
+  border-radius: 50%;
+  background: rgb(var(--accent-ink-rgb) / 0.14);
+  color: var(--color-accent-ink);
+
+  svg {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+}
+
+.notes {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+  font-size: var(--step-small);
+
+  li {
+    position: relative;
+    padding-left: 1rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0.7em;
+      left: 0;
+      width: 0.35rem;
+      height: 0.35rem;
+      border-radius: 50%;
+      background: var(--color-border-strong);
+    }
+  }
+}

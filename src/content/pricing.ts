@@ -2,14 +2,14 @@ import { site } from "./site";
 
 export const pricing = {
   seo: {
-    title: "Pricing: Fixed-Fee Websites & Monthly Growth Plans",
-    description: `How ${site.name} prices websites, maintenance, SEO and ads: fixed-fee projects, monthly plans and ad budgets you pay directly. Written quotes after a free audit.`,
+    title: "Pricing: Websites from ₹25,000, SEO from ₹18,000/month",
+    description: `${site.name} prices in rupees: websites from ₹25,000, maintenance from ₹4,000/month, SEO from ₹18,000/month and ad management from ₹12,000/month. Fixed written quotes.`,
   },
   hero: {
-    title: "Pricing that's clear before any work starts",
-    accent: "clear before any work starts",
-    lead: "We don't publish one-size price lists, because every business needs something different. Instead, every project starts with a free audit and a written quote, so you know the full cost before you commit.",
-    points: ["Free audit", "Written quote", "No surprise invoices"],
+    title: "Clear prices, fixed before any work starts",
+    accent: "fixed before any work starts",
+    lead: "Every service has a published starting price in rupees. After a free audit we send a written quote for your exact scope, and that price is fixed before you commit.",
+    points: ["Starting prices published", "Free audit", "Fixed written quote"],
   },
   models: [
     {
@@ -43,7 +43,9 @@ export const pricing = {
     "Your market and how competitive it is",
   ],
   faqs: [
-    { question: "Why don't you publish prices?", answer: "Because two websites with the same number of pages can differ hugely in content, features and integrations. A free audit lets us quote a fixed price for exactly what you need, instead of a vague 'starting from' figure." },
+    { question: "Why are these 'from' prices?", answer: "Because two websites with the same number of pages can differ a lot in content, features and integrations. The starting price is what the plan costs at its listed scope; a free audit lets us quote one fixed price for exactly what you need." },
+    { question: "Do the prices include GST?", answer: "No. Prices are shown before GST, which is added to the invoice at the rate that applies." },
+    { question: "How do payments work?", answer: "Projects are paid in stages: a deposit to start and the balance at launch, with larger projects split into milestones. Monthly plans are billed at the start of each month. The schedule is written into your quote." },
     { question: "Is the audit really free?", answer: "Yes. We review your current site and goals and share what we find, with no charge and no obligation to work with us." },
     { question: "Are there any hidden costs?", answer: "No. Third-party costs such as hosting, domains, plugins, apps and ad budgets are listed in your quote and paid directly by you, so you can see every running cost." },
     { question: "What if the scope changes during a project?", answer: "We agree any change and its cost in writing before extra work starts, so the invoice always matches what you approved." },
