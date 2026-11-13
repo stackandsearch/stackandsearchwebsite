@@ -10,6 +10,9 @@ interface PageProps {
   params: Promise<{ page: string }>;
 }
 
+// Sent complete, like the article pages (see blog/[slug]/page.tsx).
+export const ensureStatic = "navigation";
+
 // Page 2 onwards of the blog list (page 1 is /blog/).
 async function pageNumber(value: string) {
   const posts = await getWpPosts();

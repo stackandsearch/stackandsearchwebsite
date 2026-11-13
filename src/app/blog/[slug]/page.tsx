@@ -2,21 +2,22 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogPostPage } from "@/components/pages/BlogPostPage";
 import { site } from "@/content/site";
-import { pageMetadata } from "@/lib/seo/page-metadata";
+import { pageMetadata, SHARE_IMAGE } from "@/lib/seo/page-metadata";
 import { absoluteUrl } from "@/lib/seo/urls";
-import { getWpPosts } from "@/lib/wordpress";
+import { getWpPost, getWpPosts } from "@/lib/wordpress";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-async function findPost(slug: string) {
-  const posts = await getWpPosts();
-  const wanted = decodeURIComponent(slug);
-  return { posts, post: posts.find((item) => item.slug === wanted) ?? null };
-}
+// The whole page is produced before it is sent, for every post: the ones
+// built with the site and the ones published later. Without this, a post
+// published after the last deploy is first answered with an empty page shell
+// that only fills in where the host supports streaming the rest.
+export const ensureStatic = "navigation";
 
-// Every published WordPress.com post. New posts appear within ~15 minutes.
+// Posts known when the site is built. Later posts are rendered on their
+// first visit and then cached like the rest.
 export async function generateStaticParams() {
   const posts = await getWpPosts();
   return posts.length > 0 ? posts.map((post) => ({ slug: post.slug })) : [{ slug: "no-posts-yet" }];
@@ -24,7 +25,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const { post } = await findPost(slug);
+  const { post } = await getWpPost(slug);
   if (!post) return { title: "Page not found", robots: { index: false, follow: true } };
 
   const path = `/blog/${post.slug}/`;
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           ...(post.image.width ? { width: post.image.width, height: post.image.height } : {}),
         },
       ]
-    : undefined;
+    : [SHARE_IMAGE];
 
   return {
     ...pageMetadata({ title: post.title, description: post.description, path }),
@@ -50,20 +51,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       publishedTime: post.publishedAt,
       modifiedTime: post.modifiedAt,
       ...(post.category ? { section: post.category.name } : {}),
-      ...(images ? { images } : {}),
+      images,
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      ...(images ? { images: images.map((image) => image.url) } : {}),
+      images: images.map((image) => image.url),
     },
   };
 }
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const { posts, post } = await findPost(slug);
+  const { posts, post } = await getWpPost(slug);
   if (!post) notFound();
 
   const others = posts.filter((item) => item.slug !== post.slug);

@@ -112,7 +112,13 @@ export function LeadPopup() {
     return () => window.clearTimeout(timer);
   }, [armed]);
 
-  const close = () => dialogRef.current?.close();
+  // Remembered straight away as well as in onClose (which also covers the
+  // Escape key): the close event fires a moment later, and a page reload in
+  // between would otherwise bring the popup back.
+  const close = () => {
+    rememberDismissed();
+    dialogRef.current?.close();
+  };
   const onBackdropClick = (event: MouseEvent<HTMLDialogElement>) => {
     if (event.target === event.currentTarget) close();
   };

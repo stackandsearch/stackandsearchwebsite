@@ -66,6 +66,9 @@ test("inner pages pass basic SEO and layout checks", async ({ page, request }) =
       const step = Math.round(window.innerHeight * 0.6);
       for (let y = 0; y <= document.documentElement.scrollHeight; y += step) {
         window.scrollTo({ top: y, behavior: "instant" });
+        // Two painted frames per step: scroll reveals are triggered when a
+        // frame is drawn, so a fixed delay alone can skip one on a slow machine.
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         await new Promise((resolve) => setTimeout(resolve, 60));
       }
     });

@@ -71,11 +71,11 @@ export function LeadForm({ source, compact = false }: LeadFormProps) {
       } catch {
         // Storage unavailable.
       }
-      window.dispatchEvent(new Event(LEAD_SUBMITTED_EVENT));
+      window.dispatchEvent(new CustomEvent(LEAD_SUBMITTED_EVENT, { detail: { source } }));
     } else if (state.status === "error") {
       formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
     }
-  }, [state]);
+  }, [state, source]);
 
   if (state.status === "success") {
     return (
