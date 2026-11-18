@@ -264,6 +264,10 @@ export function BrandField({ anchorId }: { anchorId: string }) {
     };
 
     const draw = () => {
+      // A zero-size canvas (hidden tab, collapsed frame, not yet laid out) has
+      // nothing to show, and x / width would turn every point into NaN, which
+      // makes createRadialGradient throw and stops the loop.
+      if (width === 0 || height === 0) return;
       const scrollY = window.scrollY;
       pointer.px += (pointer.tx - pointer.px) * 0.06;
       pointer.py += (pointer.ty - pointer.py) * 0.06;
@@ -290,7 +294,8 @@ export function BrandField({ anchorId }: { anchorId: string }) {
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse") return;
+      // Dividing by a zero size would leave the parallax offset at NaN for good.
+      if (event.pointerType !== "mouse" || width === 0 || height === 0) return;
       pointer.x = event.clientX;
       pointer.y = event.clientY;
       pointer.tx = (event.clientX / width) * 2 - 1;
